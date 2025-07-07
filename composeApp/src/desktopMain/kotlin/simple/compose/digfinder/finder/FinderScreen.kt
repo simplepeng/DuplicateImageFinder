@@ -10,9 +10,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material3.ContainedLoadingIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +29,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import simple.compose.digfinder.widget.AppButton
+import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.Content
 
 @Composable
@@ -30,6 +38,7 @@ fun FinderScreen(viewModel: FinderViewModel = viewModel { FinderViewModel() }) {
     FinderScreenContent(viewModel)
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FinderScreenContent(viewModel: FinderViewModel) {
     var pathField by remember { mutableStateOf("") }
@@ -52,14 +61,15 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                Button(onClick = {
+                AppButton(onClick = {
                     viewModel.performIntent(FinderIntent.AddPath(pathField))
                 }) {
                     Text(
                         text = "add"
                     )
                 }
-                Button(onClick = {
+                AppButton(onClick = {
+                    viewModel.performIntent(FinderIntent.Scan(pathList))
                 }) {
                     Text(
                         text = "scan"
@@ -72,7 +82,7 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                 modifier = Modifier.fillMaxWidth().weight(1f)
             ) {
                 items(items = pathList) {
-                    Card(
+                    AppCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
@@ -83,5 +93,6 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                 }
             }
         }
+        ContainedLoadingIndicator()
     }
 }
