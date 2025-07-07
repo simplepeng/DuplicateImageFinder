@@ -56,6 +56,11 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                 onValueChange = {
                     pathField = it
                 },
+                label = {
+                    Text(
+                        text = "path"
+                    )
+                },
                 modifier = Modifier.fillMaxWidth()
             )
             //

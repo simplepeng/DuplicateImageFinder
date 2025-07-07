@@ -14,13 +14,11 @@ import simple.compose.digfinder.main.MainScreen
 @Preview
 fun App() {
     MaterialTheme {
-//        MainScreen()
-        FinderScreen()
         val navController = rememberNavController()
 
         NavHost(
             navController = navController,
-            startDestination = Router.Main
+            startDestination = Router.Finder
         ) {
             composable<Router.Main> {
                 MainScreen(onAction = { action ->
