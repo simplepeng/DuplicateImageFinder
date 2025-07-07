@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class FinderViewModel : ViewModel() {
 
+    private val _uiState = MutableStateFlow<FinderUIState>(FinderUIState.Default)
+    val uiState = _uiState.asStateFlow()
+
     fun performIntent(intent: FinderIntent) {
         when (intent) {
             is FinderIntent.AddPath -> addPath(intent.path)
@@ -27,6 +30,6 @@ class FinderViewModel : ViewModel() {
     }
 
     private fun scan(pathList: List<String>) {
-
+        _uiState.value = FinderUIState.Scanning
     }
 }

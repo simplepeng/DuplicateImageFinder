@@ -8,35 +8,47 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ContainedLoadingIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun Content(
-    modifier: Modifier = Modifier,
+    showLoading: Boolean = false,
+    modifier: Modifier = Modifier.fillMaxSize(),
     content: @Composable BoxScope.() -> Unit,
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
     ) {
-        TopAppBar(
-            navigationIcon = {
-
-            },
-            title = {
-                Text(
-                    text = "title"
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Box(
-            modifier = Modifier.fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier.fillMaxSize(),
         ) {
-            content()
+            TopAppBar(
+                navigationIcon = {
+
+                },
+                title = {
+                    Text(
+                        text = "title"
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                content()
+            }
+        }
+        if (showLoading) {
+            ContainedLoadingIndicator()
         }
     }
 }

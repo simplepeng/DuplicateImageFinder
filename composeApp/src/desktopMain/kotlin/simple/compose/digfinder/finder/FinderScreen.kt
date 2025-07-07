@@ -38,13 +38,15 @@ fun FinderScreen(viewModel: FinderViewModel = viewModel { FinderViewModel() }) {
     FinderScreenContent(viewModel)
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FinderScreenContent(viewModel: FinderViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
     var pathField by remember { mutableStateOf("") }
     val pathList by viewModel.pathList.collectAsState()
 
-    Content {
+    Content(
+        showLoading = uiState is FinderUIState.Scanning
+    ) {
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(5.dp),
@@ -93,6 +95,5 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                 }
             }
         }
-        ContainedLoadingIndicator()
     }
 }
