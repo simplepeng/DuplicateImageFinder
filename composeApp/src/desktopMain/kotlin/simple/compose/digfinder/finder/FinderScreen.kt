@@ -21,6 +21,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,12 +30,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectLatest
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.Content
 
 @Composable
-fun FinderScreen(viewModel: FinderViewModel = viewModel { FinderViewModel() }) {
+fun FinderScreen(
+    viewModel: FinderViewModel = viewModel { FinderViewModel() },
+    onAction: (FinderAction) -> Unit,
+) {
+    LaunchedEffect(Unit){
+        viewModel.actionState.collectLatest {
+            onAction(it)
+        }
+    }
+
     FinderScreenContent(viewModel)
 }
 

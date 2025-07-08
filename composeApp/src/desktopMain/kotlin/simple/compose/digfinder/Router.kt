@@ -1,6 +1,7 @@
 package simple.compose.digfinder
 
 import kotlinx.serialization.Serializable
+import simple.compose.digfinder.data.DuplicateFile
 
 sealed interface Router {
 
@@ -11,6 +12,6 @@ sealed interface Router {
     object Finder : Router
 
     @Serializable
-    object Result : Router
+    data class Result(val duplicateFiles: List<DuplicateFile>) : Router
 
 }
