@@ -53,6 +53,7 @@ fun FinderScreen(
 fun FinderScreenContent(viewModel: FinderViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
+//    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/Calendar/phone/src/main/res/drawable-xxhdpi") }
     val pathList by viewModel.pathList.collectAsState()
 
     var showEmptyDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }

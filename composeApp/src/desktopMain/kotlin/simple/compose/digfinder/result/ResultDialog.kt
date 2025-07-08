@@ -1,16 +1,20 @@
 package simple.compose.digfinder.result
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
 import simple.compose.digfinder.data.DuplicateFile
+import simple.compose.digfinder.ext.debugBackground
+import simple.compose.digfinder.ext.formatStr
 
 @Composable
 fun ResultDialog(
@@ -39,10 +45,14 @@ fun ResultScreenContent(
         modifier = Modifier.padding(10.dp)
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(10.dp),
         ) {
             items(duplicateFiles) { item ->
                 RowItem(item)
+                Spacer(modifier = Modifier.height(5.dp))
+                HorizontalDivider(
+                    thickness = 0.5.dp
+                )
             }
         }
     }
@@ -52,27 +62,32 @@ fun ResultScreenContent(
 private fun RowItem(item: DuplicateFile) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(5.dp)
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
     ) {
-        Item(item.path1)
-        Item(item.path2)
+        Item(item.file1)
+        Item(item.file2)
     }
 }
 
 @Composable
-private fun RowScope.Item(path: String) {
+private fun RowScope.Item(file: DuplicateFile.File) {
     Column(
-        modifier = Modifier.weight(1f),
         verticalArrangement = Arrangement.spacedBy(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable {
+
+        }.weight(1f),
     ) {
         AsyncImage(
-            model = path,
+            model = file.path,
             contentDescription = null,
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            text = path.substringAfterLast("/")
+            text = file.name
+        )
+        Text(
+            text = file.size.formatStr
         )
     }
 }

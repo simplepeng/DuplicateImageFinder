@@ -79,7 +79,7 @@ class FinderViewModel : ViewModel() {
         }
     }
 
-    private val checkMap = hashMapOf<String, String>()
+    private val checkMap = hashMapOf<String, DuplicateFile.File>()
     private val duplicateFiles = mutableListOf<DuplicateFile>()
 
     private fun analyse(file: File) {
@@ -91,9 +91,22 @@ class FinderViewModel : ViewModel() {
         if (file.isFile) {
             val hashStr = file.hashStr()
             if (checkMap.contains(hashStr)) {
-                duplicateFiles.add(DuplicateFile(checkMap[hashStr].orEmpty(), file.absolutePath))
+                duplicateFiles.add(
+                    DuplicateFile(
+                        checkMap[hashStr]!!,
+                        DuplicateFile.File(
+                            path = file.absolutePath,
+                            name = file.name,
+                            size = file.length()
+                        )
+                    )
+                )
             } else {
-                checkMap[hashStr] = file.absolutePath
+                checkMap[hashStr] = DuplicateFile.File(
+                    path = file.absolutePath,
+                    name = file.name,
+                    size = file.length()
+                )
             }
         }
     }
