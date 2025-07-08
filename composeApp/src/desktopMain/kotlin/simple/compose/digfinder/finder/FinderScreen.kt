@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -19,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -111,14 +114,26 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                 verticalArrangement = Arrangement.spacedBy(5.dp),
                 modifier = Modifier.fillMaxWidth().weight(1f)
             ) {
-                items(items = pathList) {
+                itemsIndexed(items = pathList, key = { index, item -> item.path }) { index, item ->
                     AppCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = it,
-                            modifier = Modifier.padding(5.dp)
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth().padding(start = 10.dp)
+                        ) {
+                            Text(
+                                text = item.path,
+                                modifier = Modifier
+                            )
+                            Checkbox(
+                                checked = item.isChecked,
+                                onCheckedChange = {
+                                    viewModel.performIntent(FinderIntent.UpdateChecked(index, it))
+                                }
+                            )
+                        }
                     }
                 }
             }

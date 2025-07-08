@@ -7,9 +7,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import simple.compose.digfinder.data.DuplicateFile
+import simple.compose.digfinder.data.PathWrapper
 import simple.compose.digfinder.ext.hashStr
 import java.io.File
 import kotlin.collections.forEach
@@ -33,32 +35,37 @@ class FinderViewModel : ViewModel() {
         when (intent) {
             is FinderIntent.AddPath -> addPath(intent.path)
             is FinderIntent.Scan -> scan(intent.pathList)
+            is FinderIntent.UpdateChecked -> updateChecked(intent.index, intent.isChecked)
         }
     }
 
-    private val _pathList = MutableStateFlow<List<String>>(emptyList())
+    private val _pathList = MutableStateFlow<List<PathWrapper>>(emptyList())
     val pathList = _pathList.asStateFlow()
 
     private fun addPath(path: String) {
         if (path.isEmpty()) {
             return
         }
-        if (_pathList.value.contains(path)) {
+        if (_pathList.value.map { it.path }.contains(path)) {
             return
         }
-        _pathList.value += path
+        _pathList.value += PathWrapper(path)
     }
 
-    private fun scan(pathList: List<String>) {
-        if (pathList.isEmpty())
+    private fun scan(pathList: List<PathWrapper>) {
+        val checkedList = pathList.filter { it.isChecked }
+
+        if (checkedList.isEmpty())
             return
 
+        checkMap.clear()
+        duplicateFiles.clear()
         _uiState.value = FinderUIState.Scanning
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                pathList.forEach { path ->
-                    val dirFile = File(path)
+                checkedList.forEach { wrapper ->
+                    val dirFile = File(wrapper.path)
                     analyse(dirFile)
                 }
             }
@@ -87,6 +94,14 @@ class FinderViewModel : ViewModel() {
                 duplicateFiles.add(DuplicateFile(checkMap[hashStr].orEmpty(), file.absolutePath))
             } else {
                 checkMap[hashStr] = file.absolutePath
+            }
+        }
+    }
+
+    private fun updateChecked(index: Int, isChecked: Boolean) {
+        _pathList.update {
+            it.toMutableList().apply {
+                this[index] = this[index].copy(isChecked = isChecked)
             }
         }
     }
