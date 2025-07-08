@@ -1,4 +1,4 @@
-package simple.compose.digfinder.main
+package simple.compose.digfinder.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Dialog

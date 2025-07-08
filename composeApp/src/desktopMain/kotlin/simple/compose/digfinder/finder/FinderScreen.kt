@@ -1,5 +1,6 @@
 package simple.compose.digfinder.finder
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -30,7 +32,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
+import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.dialog.DuplicateFilesEmptyDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
@@ -57,6 +62,9 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
     val pathList by viewModel.pathList.collectAsState()
 
     Content(
+        onBack = {
+            viewModel.doAction(FinderAction.Back)
+        },
         showLoading = uiState is FinderUIState.Scanning
     ) {
         Column(
@@ -71,6 +79,15 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                 label = {
                     Text(
                         text = "path"
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(Res.drawable.ic_clear),
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                            pathField = ""
+                        }.padding(5.dp)
                     )
                 },
                 modifier = Modifier.fillMaxWidth()

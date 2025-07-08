@@ -20,6 +20,12 @@ class FinderViewModel : ViewModel() {
     private val _actionState = MutableSharedFlow<FinderAction>()
     val actionState = _actionState.asSharedFlow()
 
+    fun doAction(action: FinderAction) {
+        viewModelScope.launch {
+            _actionState.emit(action)
+        }
+    }
+
     private val _uiState = MutableStateFlow<FinderUIState>(FinderUIState.Default)
     val uiState = _uiState.asStateFlow()
 

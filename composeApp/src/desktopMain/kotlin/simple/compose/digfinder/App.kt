@@ -36,6 +36,7 @@ fun App() {
             composable<Router.Finder> {
                 FinderScreen(onAction = { action ->
                     when (action) {
+                        FinderAction.Back -> navController.navigateUp()
                         is FinderAction.NavToResult -> navController.navigate(Router.Result(""))
                     }
                 })
