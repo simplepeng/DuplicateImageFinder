@@ -25,7 +25,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta03")
-//            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+            implementation("io.coil-kt.coil3:coil-compose:3.2.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

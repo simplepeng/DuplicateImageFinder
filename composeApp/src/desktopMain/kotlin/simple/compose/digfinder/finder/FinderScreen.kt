@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.collectLatest
+import simple.compose.digfinder.dialog.DuplicateFilesEmptyDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.Content
@@ -40,7 +41,7 @@ fun FinderScreen(
     viewModel: FinderViewModel = viewModel { FinderViewModel() },
     onAction: (FinderAction) -> Unit,
 ) {
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         viewModel.actionState.collectLatest {
             onAction(it)
         }
@@ -52,7 +53,7 @@ fun FinderScreen(
 @Composable
 fun FinderScreenContent(viewModel: FinderViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-    var pathField by remember { mutableStateOf("") }
+    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
     val pathList by viewModel.pathList.collectAsState()
 
     Content(
@@ -111,5 +112,14 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                 }
             }
         }
+    }
+
+    var showDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }
+    if (showDialog) {
+        DuplicateFilesEmptyDialog(
+            onDismissRequest = {
+                showDialog = false
+            }
+        )
     }
 }

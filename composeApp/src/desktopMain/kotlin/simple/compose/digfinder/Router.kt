@@ -2,16 +2,17 @@ package simple.compose.digfinder
 
 import kotlinx.serialization.Serializable
 import simple.compose.digfinder.data.DuplicateFile
+import simple.compose.digfinder.data.ResultWrapper
 
 sealed interface Router {
 
     @Serializable
-    object Main : Router
+    data object Main : Router
 
     @Serializable
-    object Finder : Router
+    data object Finder : Router
 
     @Serializable
-    data class Result(val duplicateFiles: List<DuplicateFile>) : Router
+     class Result(val path: String) : Router
 
 }

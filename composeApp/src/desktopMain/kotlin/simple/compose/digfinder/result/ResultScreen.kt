@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.widget.Content
 
@@ -50,6 +52,13 @@ private fun RowScope.Item(path: String) {
         modifier = Modifier.weight(1f),
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-
+        AsyncImage(
+            model = path,
+            contentDescription = null,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = path.substringAfterLast("/")
+        )
     }
 }

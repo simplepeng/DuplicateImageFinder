@@ -56,7 +56,13 @@ class FinderViewModel : ViewModel() {
                     analyse(dirFile)
                 }
             }
-            _uiState.value = FinderUIState.ScanComplete
+
+            if (duplicateFiles.isEmpty()) {
+                _uiState.value = FinderUIState.DuplicateFilesIsEmpty
+                return@launch
+            }
+
+            _uiState.value = FinderUIState.Default
             viewModelScope.launch {
                 _actionState.emit(FinderAction.NavToResult(duplicateFiles))
             }
