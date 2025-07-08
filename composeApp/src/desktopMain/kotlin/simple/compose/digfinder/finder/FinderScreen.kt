@@ -9,19 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material3.ContainedLoadingIndicator
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.LoadingIndicator
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +27,7 @@ import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.dialog.DuplicateFilesEmptyDialog
+import simple.compose.digfinder.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.Content
@@ -60,6 +51,9 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
     val pathList by viewModel.pathList.collectAsState()
+
+    var showEmptyDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }
+    var showResultDialog by remember(uiState) { mutableStateOf(uiState is FinderUIState.ShowResultDialog) }
 
     Content(
         onBack = {
@@ -131,12 +125,20 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
         }
     }
 
-    var showDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }
-    if (showDialog) {
+    if (showEmptyDialog) {
         DuplicateFilesEmptyDialog(
             onDismissRequest = {
-                showDialog = false
+                showEmptyDialog = false
             }
+        )
+    }
+
+    if (showResultDialog) {
+        ResultDialog(
+            onDismissRequest = {
+                showResultDialog = false
+            },
+            duplicateFiles = (uiState as FinderUIState.ShowResultDialog).duplicateFiles
         )
     }
 }

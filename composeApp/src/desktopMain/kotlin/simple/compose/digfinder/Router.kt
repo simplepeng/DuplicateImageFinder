@@ -13,6 +13,6 @@ sealed interface Router {
     data object Finder : Router
 
     @Serializable
-     class Result(val path: String) : Router
+    class Result(val duplicateFiles: List<DuplicateFile>) : Router
 
 }

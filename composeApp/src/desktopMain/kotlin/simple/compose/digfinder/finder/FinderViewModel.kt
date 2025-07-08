@@ -68,10 +68,7 @@ class FinderViewModel : ViewModel() {
                 return@launch
             }
 
-            _uiState.value = FinderUIState.Default
-            viewModelScope.launch {
-                _actionState.emit(FinderAction.NavToResult(duplicateFiles))
-            }
+            _uiState.value = FinderUIState.ShowResultDialog(duplicateFiles)
         }
     }
 
