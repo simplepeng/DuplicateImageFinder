@@ -115,6 +115,13 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                         text = "scan"
                     )
                 }
+                AppButton(onClick = {
+                    viewModel.watching(pathList)
+                }) {
+                    Text(
+                        text = "watching"
+                    )
+                }
             }
             //
             LazyColumn(

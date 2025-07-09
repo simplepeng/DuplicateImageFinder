@@ -14,8 +14,12 @@ import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.data.PathWrapper
 import simple.compose.digfinder.ext.hashStr
 import java.io.File
-import kotlin.collections.forEach
-import kotlin.collections.orEmpty
+import java.nio.file.FileSystems
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardWatchEventKinds
+import java.nio.file.WatchEvent
+
 
 class FinderViewModel : ViewModel() {
 
@@ -115,6 +119,38 @@ class FinderViewModel : ViewModel() {
         _pathList.update {
             it.toMutableList().apply {
                 this[index] = this[index].copy(isChecked = isChecked)
+            }
+        }
+    }
+
+    fun watching(pathList: List<PathWrapper>) {
+        pathList.forEach { wrapper ->
+            val dirFile = File(wrapper.path)
+            if (dirFile.isDirectory) {
+                val directory = Paths.get(wrapper.path)
+                val watchService = FileSystems.getDefault().newWatchService()
+                directory.register(watchService, StandardWatchEventKinds.ENTRY_CREATE)
+
+                println("开始监听目录: $directory")
+
+                while (true) {
+                    val key = watchService.take() // 阻塞等待事件
+
+                    for (event in key.pollEvents()) {
+                        val kind: WatchEvent.Kind<*>? = event.kind()
+                        val fileName = event.context() as Path?
+
+                        if (kind === StandardWatchEventKinds.ENTRY_CREATE) {
+                            println("文件创建: $fileName")
+                        }
+                    }
+
+                    // 重置key，继续监听
+                    val valid = key.reset()
+                    if (!valid) {
+                        break
+                    }
+                }
             }
         }
     }
