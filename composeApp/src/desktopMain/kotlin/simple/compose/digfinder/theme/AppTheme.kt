@@ -17,24 +17,32 @@ fun AppTheme(
     val colors = if (isSystemInDarkTheme()) {
         darkColors(
             primary = primaryDark,
+            primaryVariant = primaryContainerDark,
             secondary = secondaryDark,
+            secondaryVariant = secondaryContainerDark,
             background = backgroundDark,
             surface = surfaceDark,
+            error = errorDark,
             onPrimary = onPrimaryDark,
             onSecondary = onSecondaryDark,
             onBackground = onBackgroundDark,
-            onSurface = onSurfaceDark
+            onSurface = onSurfaceDark,
+            onError = onErrorDark
         )
     } else {
         lightColors(
             primary = primaryLight,
+            primaryVariant = primaryContainerLight,
             secondary = secondaryLight,
+            secondaryVariant = secondaryContainerLight,
             background = backgroundLight,
             surface = surfaceLight,
+            error = errorLight,
             onPrimary = onPrimaryLight,
             onSecondary = onSecondaryLight,
             onBackground = onBackgroundLight,
-            onSurface = onSurfaceLight
+            onSurface = onSurfaceLight,
+            onError = onErrorLight
         )
     }
 

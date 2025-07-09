@@ -33,6 +33,7 @@ import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.ext.formatStr
+import simple.compose.digfinder.widget.AppCard
 
 @Composable
 fun ResultDialog(
@@ -101,7 +102,7 @@ private fun RowItem(
     item: DuplicateFile,
     onItemClick: (DuplicateFile.File) -> Unit = {}
 ) {
-    OutlinedCard {
+    AppCard {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
