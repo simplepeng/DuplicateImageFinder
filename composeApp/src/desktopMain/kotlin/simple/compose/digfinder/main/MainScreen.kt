@@ -34,7 +34,7 @@ fun MainScreenContent(
     viewModel: MainViewModel
 ) {
     Box(
-        modifier = Modifier.fillMaxSize().padding(bottom = 10.dp, end = 10.dp)
+        modifier = Modifier.fillMaxSize().padding(bottom = 20.dp, end = 20.dp)
     ) {
         ExtendedFloatingActionButton(
             modifier = Modifier.align(Alignment.BottomEnd),
