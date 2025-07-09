@@ -8,17 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,7 +28,7 @@ import duplicateimagefinder.composeapp.generated.resources.Res
 import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
-import simple.compose.digfinder.dialog.DuplicateFilesEmptyDialog
+import simple.compose.digfinder.dialog.NoDuplicateFilesDialog
 import simple.compose.digfinder.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
@@ -57,9 +51,9 @@ fun FinderScreen(
 @Composable
 fun FinderScreenContent(viewModel: FinderViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
+//    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
 //    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/Calendar/phone/src/main/res/drawable-xxhdpi") }
-//    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/mooda/app/src/main/res/drawable-xxxhdpi") }
+    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/mooda/app/src/main/res/drawable-xxxhdpi") }
     val pathList by viewModel.pathList.collectAsState()
 
     var showEmptyDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }
@@ -155,7 +149,7 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
     }
 
     if (showEmptyDialog) {
-        DuplicateFilesEmptyDialog(
+        NoDuplicateFilesDialog(
             onDismissRequest = {
                 showEmptyDialog = false
             }

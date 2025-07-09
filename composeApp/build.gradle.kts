@@ -27,6 +27,7 @@ kotlin {
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta03")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
             implementation("io.coil-kt.coil3:coil-compose:3.2.0")
+            implementation("io.github.ismai117:kottie:2.0.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
