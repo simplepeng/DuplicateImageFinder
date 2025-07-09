@@ -19,6 +19,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -44,17 +45,29 @@ fun ResultDialog(
 fun ResultScreenContent(
     duplicateFiles: List<DuplicateFile>
 ) {
+    val totalSize = remember { duplicateFiles.sumOf { it.file2.size } }
+
     Card(
         modifier = Modifier.padding(vertical = 10.dp),
         shape = RoundedCornerShape(10.dp)
     ) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier.fillMaxSize()
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxWidth()
                 .padding(10.dp),
         ) {
-            items(duplicateFiles) { item ->
-                RowItem(item)
+            Text(
+                text = "本次优化完成预计可缩小包体积约 ${totalSize.formatStr}"
+            )
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+                modifier = Modifier.fillMaxSize()
+
+            ) {
+                items(duplicateFiles) { item ->
+                    RowItem(item)
+                }
             }
         }
     }
