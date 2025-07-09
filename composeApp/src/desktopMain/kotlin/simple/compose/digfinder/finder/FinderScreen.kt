@@ -59,7 +59,7 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
 
     var showEmptyDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }
     var showResultDialog by remember(uiState) { mutableStateOf(uiState is FinderUIState.ShowResultDialog) }
-    val showWatchingDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.Watching) }
+    var showWatchingDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.Watching) }
 
     Content(
         onBack = {
@@ -169,7 +169,7 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
 
     if (showWatchingDialog) {
         WatchingDialog(onDismissRequest = {
-            showResultDialog = false
+            showWatchingDialog = false
         })
     }
 }

@@ -39,7 +39,7 @@ class FinderViewModel : ViewModel() {
             is FinderIntent.AddPath -> addPath(intent.path)
             is FinderIntent.Scan -> scan(intent.pathList)
             is FinderIntent.UpdateChecked -> updateChecked(intent.index, intent.isChecked)
-            is FinderIntent.Watching -> watching(intent.pathList)
+            is FinderIntent.Watching ->  _uiState.value = FinderUIState.Watching
         }
     }
 
