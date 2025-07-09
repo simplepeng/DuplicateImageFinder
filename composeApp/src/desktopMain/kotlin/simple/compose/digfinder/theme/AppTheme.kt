@@ -1,16 +1,12 @@
 package simple.compose.digfinder.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun AppTheme(
@@ -20,25 +16,25 @@ fun AppTheme(
 ) {
     val colors = if (isSystemInDarkTheme()) {
         darkColors(
-            primary = Color.Red,
-            secondary = Color(0xFF03DAC6),
-            background = Color(0xFF121212),
-            surface = Color(0xFF121212),
-            onPrimary = Color.Black,
-            onSecondary = Color.Black,
-            onBackground = Color.White,
-            onSurface = Color.White
+            primary = primaryDark,
+            secondary = secondaryDark,
+            background = backgroundDark,
+            surface = surfaceDark,
+            onPrimary = onPrimaryDark,
+            onSecondary = onSecondaryDark,
+            onBackground = onBackgroundDark,
+            onSurface = onSurfaceDark
         )
     } else {
         lightColors(
-            primary = Color.Red,
-            secondary = Color(0xFF03DAC6),
-            background = Color.White,
-            surface = Color.White,
-            onPrimary = Color.White,
-            onSecondary = Color.Black,
-            onBackground = Color.Black,
-            onSurface = Color.Black
+            primary = primaryLight,
+            secondary = secondaryLight,
+            background = backgroundLight,
+            surface = surfaceLight,
+            onPrimary = onPrimaryLight,
+            onSecondary = onSecondaryLight,
+            onBackground = onBackgroundLight,
+            onSurface = onSurfaceLight
         )
     }
 
