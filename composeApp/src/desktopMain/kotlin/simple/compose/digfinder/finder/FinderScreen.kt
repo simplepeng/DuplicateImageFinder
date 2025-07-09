@@ -29,6 +29,7 @@ import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.dialog.NoDuplicateFilesDialog
+import simple.compose.digfinder.dialog.WatchingDialog
 import simple.compose.digfinder.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
@@ -51,13 +52,14 @@ fun FinderScreen(
 @Composable
 fun FinderScreenContent(viewModel: FinderViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-//    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
+    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
 //    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/Calendar/phone/src/main/res/drawable-xxhdpi") }
-    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/mooda/app/src/main/res/drawable-xxxhdpi") }
+//    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/mooda/app/src/main/res/drawable-xxxhdpi") }
     val pathList by viewModel.pathList.collectAsState()
 
     var showEmptyDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }
     var showResultDialog by remember(uiState) { mutableStateOf(uiState is FinderUIState.ShowResultDialog) }
+    val showWatchingDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.Watching) }
 
     Content(
         onBack = {
@@ -110,7 +112,7 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                     )
                 }
                 AppButton(onClick = {
-                    viewModel.watching(pathList)
+                    viewModel.performIntent(FinderIntent.Watching(pathList))
                 }) {
                     Text(
                         text = "watching"
@@ -163,5 +165,11 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
             },
             duplicateFiles = (uiState as FinderUIState.ShowResultDialog).duplicateFiles
         )
+    }
+
+    if (showWatchingDialog) {
+        WatchingDialog(onDismissRequest = {
+            showResultDialog = false
+        })
     }
 }

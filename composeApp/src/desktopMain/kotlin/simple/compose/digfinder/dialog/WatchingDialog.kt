@@ -2,48 +2,51 @@ package simple.compose.digfinder.dialog
 
 import KottieAnimation
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import duplicateimagefinder.composeapp.generated.resources.Res
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kottieComposition.KottieCompositionSpec
 import kottieComposition.animateKottieCompositionAsState
 import kottieComposition.rememberKottieComposition
 import simple.compose.digfinder.ext.debugBackground
+import simple.compose.digfinder.widget.AppButton
 import utils.KottieConstants
 
 @Composable
-fun NoDuplicateFilesDialog(
+fun WatchingDialog(
     onDismissRequest: () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
+        properties = DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
+        )
     ) {
-        NoDuplicateFilesDialogContent(onDismissRequest)
+        DialogContent()
     }
 }
 
 @Composable
-fun NoDuplicateFilesDialogContent(
-    onDismissRequest: () -> Unit,
-) {
+private fun DialogContent() {
     var animation by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        animation = Res.readBytes("files/no_duplicate_files.json").decodeToString()
+        animation = Res.readBytes("files/watching.json").decodeToString()
     }
 
     val composition = rememberKottieComposition(
@@ -53,27 +56,33 @@ fun NoDuplicateFilesDialogContent(
         composition = composition,
 //        isPlaying = true,
 //        restartOnPlay = false,
-//        iterations = KottieConstants.IterateForever
+        iterations = KottieConstants.IterateForever
     )
-    LaunchedEffect(animationState.isCompleted) {
-        if (animationState.isCompleted) {
-            delay(200)
-            onDismissRequest.invoke()
-        }
-    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier.debugBackground()
     ) {
-        KottieAnimation(
-            composition = composition,
-            progress = { animationState.progress },
-            modifier = Modifier.size(300.dp)
-        )
-        Text(
-            text = "恭喜你！竟然一个重复的资源文件都没有！",
-            color = Color.White
-        )
+        Box(
+            modifier = Modifier,
+            contentAlignment = Alignment.Center
+        ) {
+            KottieAnimation(
+                composition = composition,
+                progress = { animationState.progress },
+                modifier = Modifier.size(300.dp)
+            )
+            Text(
+                text = "Watching"
+            )
+        }
+        AppButton(onClick = {
+
+        }) {
+            Text(
+                text = "Cancel"
+            )
+        }
     }
 }

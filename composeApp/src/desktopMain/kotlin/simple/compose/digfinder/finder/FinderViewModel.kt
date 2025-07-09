@@ -20,7 +20,6 @@ import java.nio.file.Paths
 import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchEvent
 
-
 class FinderViewModel : ViewModel() {
 
     private val _actionState = MutableSharedFlow<FinderAction>()
@@ -40,6 +39,7 @@ class FinderViewModel : ViewModel() {
             is FinderIntent.AddPath -> addPath(intent.path)
             is FinderIntent.Scan -> scan(intent.pathList)
             is FinderIntent.UpdateChecked -> updateChecked(intent.index, intent.isChecked)
+            is FinderIntent.Watching -> watching(intent.pathList)
         }
     }
 
@@ -123,7 +123,13 @@ class FinderViewModel : ViewModel() {
         }
     }
 
-    fun watching(pathList: List<PathWrapper>) {
+    private fun watching(pathList: List<PathWrapper>) {
+        if (pathList.isEmpty()){
+            return
+        }
+
+        _uiState.value = FinderUIState.Watching
+
         pathList.forEach { wrapper ->
             val dirFile = File(wrapper.path)
             if (dirFile.isDirectory) {

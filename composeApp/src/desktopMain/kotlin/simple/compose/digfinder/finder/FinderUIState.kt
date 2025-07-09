@@ -9,7 +9,8 @@ sealed interface FinderUIState {
     data object Scanning : FinderUIState
 
     data object DuplicateFilesIsEmpty : FinderUIState
-    
+
     data class ShowResultDialog(val duplicateFiles: List<DuplicateFile>) : FinderUIState
 
+    data object Watching : FinderUIState
 }

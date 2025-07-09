@@ -8,5 +8,7 @@ sealed interface FinderIntent {
 
     data class Scan(val pathList: List<PathWrapper>) : FinderIntent
 
+    data class Watching(val pathList: List<PathWrapper>) : FinderIntent
+
     data class UpdateChecked(val index: Int, val isChecked: Boolean) : FinderIntent
 }
