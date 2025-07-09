@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,17 +45,16 @@ fun ResultScreenContent(
     duplicateFiles: List<DuplicateFile>
 ) {
     Card(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(vertical = 10.dp),
+        shape = RoundedCornerShape(10.dp)
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = Modifier.fillMaxSize()
+                .padding(10.dp),
         ) {
             items(duplicateFiles) { item ->
                 RowItem(item)
-                Spacer(modifier = Modifier.height(5.dp))
-                HorizontalDivider(
-                    thickness = 0.5.dp
-                )
             }
         }
     }
@@ -60,23 +62,26 @@ fun ResultScreenContent(
 
 @Composable
 private fun RowItem(item: DuplicateFile) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
-    ) {
-        Item(item.file1)
-        Item(item.file2)
+    OutlinedCard {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+        ) {
+            Item(item.file1)
+            Item(item.file2)
+        }
     }
 }
 
 @Composable
 private fun RowScope.Item(file: DuplicateFile.File) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(5.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable {
+        modifier = Modifier.weight(1f)
+            .clickable {
 
-        }.weight(1f),
+            }.padding(vertical = 5.dp, horizontal = 10.dp)
     ) {
         AsyncImage(
             model = file.path,
