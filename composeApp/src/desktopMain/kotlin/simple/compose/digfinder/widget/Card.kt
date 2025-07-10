@@ -8,8 +8,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import simple.compose.digfinder.config.Dimens
+import simple.compose.digfinder.config.Dimen
 
 @Composable
 fun AppCard(
@@ -25,12 +24,12 @@ fun AppCard(
 
 @Composable
 fun DialogCard(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.padding(Dimen.dialogPadding),
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(Dimens.dialogCornerSize),
+        shape = RoundedCornerShape(Dimen.dialogCornerSize),
         content = content
     )
 }

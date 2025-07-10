@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
-import simple.compose.digfinder.config.Dimens
+import simple.compose.digfinder.config.Dimen
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.widget.DialogCard
 
@@ -43,7 +43,7 @@ private fun DialogContent(
 
     DialogCard {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(Dimens.dialogPadding),
+            modifier = Modifier.fillMaxWidth().padding(Dimen.dialogPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
