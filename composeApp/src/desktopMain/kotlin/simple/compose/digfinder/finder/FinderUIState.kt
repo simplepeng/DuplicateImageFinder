@@ -16,4 +16,6 @@ sealed interface FinderUIState {
     data object Watching : FinderUIState
 
     data class ShowNewFileDialog(val targetDirFile: File, val dropFile: File) : FinderUIState
+
+    data class ShowFileExistsDialog(val file: DuplicateFile.File) : FinderUIState
 }

@@ -197,6 +197,9 @@ class FinderViewModel : ViewModel() {
         val hashStr = dropFile.hashStr()
         if (hashStrMap.contains(hashStr)) {
             println("oops，已经有这个资源文件了！")
+            hashStrMap.get(hashStr)?.let {
+                _uiState.value = FinderUIState.ShowFileExistsDialog(it)
+            }
         } else {
             println("这个文件是新增的哦，是否重命名呢？")
             _uiState.value = FinderUIState.ShowNewFileDialog(targetDirFile, dropFile)

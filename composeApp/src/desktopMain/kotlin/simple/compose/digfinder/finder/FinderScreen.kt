@@ -39,6 +39,7 @@ import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.data.PathWrapper
+import simple.compose.digfinder.dialog.FileExistsDialog
 import simple.compose.digfinder.dialog.NewFileDialog
 import simple.compose.digfinder.dialog.NoDuplicateFilesDialog
 import simple.compose.digfinder.dialog.WatchingDialog
@@ -183,6 +184,14 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                     viewModel.updateUIState(FinderUIState.Default)
                 }
             )
+        }
+
+        is FinderUIState.ShowFileExistsDialog -> {
+            FileExistsDialog(
+                (uiState as FinderUIState.ShowFileExistsDialog).file,
+                onDismissRequest = {
+                    viewModel.updateUIState(FinderUIState.Default)
+                })
         }
 
         else -> {
