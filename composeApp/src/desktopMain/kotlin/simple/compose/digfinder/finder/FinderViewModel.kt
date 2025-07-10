@@ -34,6 +34,10 @@ class FinderViewModel : ViewModel() {
     private val _uiState = MutableStateFlow<FinderUIState>(FinderUIState.Default)
     val uiState = _uiState.asStateFlow()
 
+    fun updateUIState(state: FinderUIState) {
+        _uiState.value = state
+    }
+
     fun performIntent(intent: FinderIntent) {
         when (intent) {
             is FinderIntent.AddPath -> addPath(intent.path)
@@ -195,7 +199,7 @@ class FinderViewModel : ViewModel() {
             println("oops，已经有这个资源文件了！")
         } else {
             println("这个文件是新增的哦，是否重命名呢？")
-            renameFile(targetDirFile, dropFile)
+            _uiState.value = FinderUIState.ShowNewFileDialog(targetDirFile, dropFile)
         }
     }
 

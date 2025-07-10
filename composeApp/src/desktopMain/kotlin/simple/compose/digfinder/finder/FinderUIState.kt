@@ -1,6 +1,7 @@
 package simple.compose.digfinder.finder
 
 import simple.compose.digfinder.data.DuplicateFile
+import java.io.File
 
 sealed interface FinderUIState {
 
@@ -13,4 +14,6 @@ sealed interface FinderUIState {
     data class ShowResultDialog(val duplicateFiles: List<DuplicateFile>) : FinderUIState
 
     data object Watching : FinderUIState
+
+    data class ShowNewFileDialog(val targetDirFile: File, val dropFile: File) : FinderUIState
 }

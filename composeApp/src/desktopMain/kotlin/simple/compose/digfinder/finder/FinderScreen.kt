@@ -39,6 +39,7 @@ import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.data.PathWrapper
+import simple.compose.digfinder.dialog.NewFileDialog
 import simple.compose.digfinder.dialog.NoDuplicateFilesDialog
 import simple.compose.digfinder.dialog.WatchingDialog
 import simple.compose.digfinder.result.ResultDialog
@@ -173,6 +174,20 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
         WatchingDialog(onDismissRequest = {
             showWatchingDialog = false
         })
+    }
+
+    when (uiState) {
+        is FinderUIState.ShowNewFileDialog -> {
+            NewFileDialog(
+                onDismissRequest = {
+                    viewModel.updateUIState(FinderUIState.Default)
+                }
+            )
+        }
+
+        else -> {
+
+        }
     }
 }
 
