@@ -3,14 +3,19 @@ package simple.compose.digfinder.dialog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
+import simple.compose.digfinder.config.Dimens
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.widget.DialogCard
 
@@ -21,16 +26,24 @@ fun FileExistsDialog(
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
+        properties = DialogProperties(
+            dismissOnClickOutside = false,
+        )
     ) {
-        DialogContent(file)
+        DialogContent(file, onDismissRequest)
     }
 }
 
 @Composable
-private fun DialogContent(file: DuplicateFile.File,) {
+private fun DialogContent(
+    file: DuplicateFile.File,
+    onDismissRequest: () -> Unit,
+) {
+    val clipboardManager = LocalClipboardManager.current
+
     DialogCard {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(Dimens.dialogPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -46,7 +59,8 @@ private fun DialogContent(file: DuplicateFile.File,) {
             )
             Button(
                 onClick = {
-
+                    clipboardManager.setText(AnnotatedString(file.name.substringBefore(".")))
+                    onDismissRequest.invoke()
                 }
             ) {
                 Text(text = "Copy Name")

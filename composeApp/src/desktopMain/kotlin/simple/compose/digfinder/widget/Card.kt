@@ -25,7 +25,7 @@ fun AppCard(
 
 @Composable
 fun DialogCard(
-    modifier: Modifier = Modifier.padding(Dimens.dialogPadding),
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
