@@ -39,7 +39,8 @@ class FinderViewModel : ViewModel() {
             is FinderIntent.AddPath -> addPath(intent.path)
             is FinderIntent.Scan -> scan(intent.pathList)
             is FinderIntent.UpdateChecked -> updateChecked(intent.index, intent.isChecked)
-            is FinderIntent.Watching ->  _uiState.value = FinderUIState.Watching
+            is FinderIntent.Watching -> _uiState.value = FinderUIState.Watching
+            is FinderIntent.CheckDropFile -> checkDropFile(intent.targetDir, intent.dropFile)
         }
     }
 
@@ -79,14 +80,14 @@ class FinderViewModel : ViewModel() {
                 return@launch
             }
 
-            _uiState.value = FinderUIState.ShowResultDialog(duplicateFiles)
+            _uiState.value = FinderUIState.ShowResultDialog(duplicateFiles.toList())
         }
     }
 
     private val checkMap = hashMapOf<String, DuplicateFile.File>()
-    private val duplicateFiles = mutableListOf<DuplicateFile>()
+    private val duplicateFiles = hashSetOf<DuplicateFile>()
 
-    private fun analyse(file: File) {
+    private suspend fun analyse(file: File) {
         if (file.isDirectory) {
             file.listFiles().orEmpty().forEach { resFile ->
                 analyse(resFile)
@@ -124,7 +125,7 @@ class FinderViewModel : ViewModel() {
     }
 
     private fun watching(pathList: List<PathWrapper>) {
-        if (pathList.isEmpty()){
+        if (pathList.isEmpty()) {
             return
         }
 
@@ -159,5 +160,25 @@ class FinderViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    private fun checkDropFile(
+        targetDir: String,
+        dropFile: File
+    ) {
+        val targetDirFile = File(targetDir)
+        if (!targetDirFile.exists() || !targetDirFile.isDirectory) {
+            return
+        }
+        if (!dropFile.exists() || !dropFile.isFile) {
+            return
+        }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                analyse(targetDirFile)
+            }
+
+        }
+
     }
 }

@@ -142,6 +142,9 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
                         item,
                         onCheckedChange = {
                             viewModel.performIntent(FinderIntent.UpdateChecked(index, it))
+                        },
+                        onDropFile = { targetDir, dropFile ->
+                            viewModel.performIntent(FinderIntent.CheckDropFile(targetDir, dropFile))
                         })
                 }
             }
@@ -177,6 +180,7 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
 private fun PathItem(
     item: PathWrapper,
     onCheckedChange: (Boolean) -> Unit,
+    onDropFile: (targetDir: String, dropFile: File) -> Unit = { _, _ -> },
 ) {
     var showTargetBorder by remember { mutableStateOf(false) }
     val dragAndDropTarget = remember {
@@ -185,12 +189,13 @@ private fun PathItem(
             override fun onDrop(event: DragAndDropEvent): Boolean {
                 println("Action at the target: ${event.action}")
                 val dragData = event.dragData()
-                if (dragData is DragData.FilesList){
-                    dragData.readFiles().forEach {path->
+                if (dragData is DragData.FilesList) {
+                    dragData.readFiles().forEach { path ->
                         println(path)
                         File(URI(path)).also {
-                            if (it.isFile){
+                            if (it.isFile && it.exists()) {
                                 println(it.absolutePath)
+                                onDropFile.invoke(item.path, it)
                             }
                         }
                     }

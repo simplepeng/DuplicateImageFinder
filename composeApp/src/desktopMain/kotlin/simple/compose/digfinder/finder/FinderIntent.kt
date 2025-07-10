@@ -1,6 +1,7 @@
 package simple.compose.digfinder.finder
 
 import simple.compose.digfinder.data.PathWrapper
+import java.io.File
 
 sealed interface FinderIntent {
 
@@ -11,4 +12,6 @@ sealed interface FinderIntent {
     data class Watching(val pathList: List<PathWrapper>) : FinderIntent
 
     data class UpdateChecked(val index: Int, val isChecked: Boolean) : FinderIntent
+
+    data class CheckDropFile(val targetDir: String, val dropFile: File) : FinderIntent
 }
