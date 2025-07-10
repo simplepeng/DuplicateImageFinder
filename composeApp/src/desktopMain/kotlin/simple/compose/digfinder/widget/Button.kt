@@ -1,7 +1,7 @@
 package simple.compose.digfinder.widget
 
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.OutlinedButton
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -11,7 +11,7 @@ fun AppButton(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
-    OutlinedButton(
+    Button(
         onClick = onClick,
         modifier = modifier,
         content = content,

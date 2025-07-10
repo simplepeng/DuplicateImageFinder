@@ -4,8 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import simple.compose.digfinder.config.Dimen
 import simple.compose.digfinder.data.DuplicateFile
+import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.DialogCard
 
 @Composable
@@ -57,7 +57,7 @@ private fun DialogContent(
             Text(
                 text = file.name
             )
-            Button(
+            AppButton(
                 onClick = {
                     clipboardManager.setText(AnnotatedString(file.name.substringBefore(".")))
                     onDismissRequest.invoke()

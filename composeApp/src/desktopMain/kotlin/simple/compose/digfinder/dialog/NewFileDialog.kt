@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +21,7 @@ import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import simple.compose.digfinder.config.Dimen
 import simple.compose.digfinder.theme.AppTheme
+import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.DialogCard
 import java.io.File
 
@@ -84,12 +84,12 @@ private fun DialogContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Button(onClick = {
+                AppButton(onClick = {
                     onDismissRequest.invoke()
                 }) {
                     Text(text = "Cancel")
                 }
-                Button(onClick = {
+                AppButton(onClick = {
                     onSure.invoke("$newFileNameState.${dropFile.extension}")
                 }) {
                     Text(text = "Confirm")

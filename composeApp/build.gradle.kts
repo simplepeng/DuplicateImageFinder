@@ -13,7 +13,11 @@ kotlin {
     
     sourceSets {
         val desktopMain by getting
-        
+
+        configurations.all {
+            exclude(group = "org.jetbrains.compose.material", module = "material")
+        }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)

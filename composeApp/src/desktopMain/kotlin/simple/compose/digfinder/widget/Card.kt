@@ -15,7 +15,7 @@ fun AppCard(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    OutlinedCard(
+    Card(
         modifier = modifier,
         shape = CardDefaults.outlinedShape,
         content = content
