@@ -63,7 +63,7 @@ class FinderViewModel : ViewModel() {
         if (checkedList.isEmpty())
             return
 
-        checkMap.clear()
+        hashStrMap.clear()
         duplicateFiles.clear()
         _uiState.value = FinderUIState.Scanning
 
@@ -84,8 +84,22 @@ class FinderViewModel : ViewModel() {
         }
     }
 
-    private val checkMap = hashMapOf<String, DuplicateFile.File>()
+    private val hashStrMap = hashMapOf<String, DuplicateFile.File>()
     private val duplicateFiles = hashSetOf<DuplicateFile>()
+
+    private fun checkHashMap() {
+        if (hashStrMap.isNotEmpty()) return
+
+        val checkedList = _pathList.value.filter { it.isChecked }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                checkedList.forEach { wrapper ->
+                    val dirFile = File(wrapper.path)
+                    analyse(dirFile)
+                }
+            }
+        }
+    }
 
     private suspend fun analyse(file: File) {
         if (file.isDirectory) {
@@ -95,10 +109,10 @@ class FinderViewModel : ViewModel() {
         }
         if (file.isFile) {
             val hashStr = file.hashStr()
-            if (checkMap.contains(hashStr)) {
+            if (hashStrMap.contains(hashStr)) {
                 duplicateFiles.add(
                     DuplicateFile(
-                        checkMap[hashStr]!!,
+                        hashStrMap[hashStr]!!,
                         DuplicateFile.File(
                             path = file.absolutePath,
                             name = file.name,
@@ -107,7 +121,7 @@ class FinderViewModel : ViewModel() {
                     )
                 )
             } else {
-                checkMap[hashStr] = DuplicateFile.File(
+                hashStrMap[hashStr] = DuplicateFile.File(
                     path = file.absolutePath,
                     name = file.name,
                     size = file.length()
@@ -173,12 +187,14 @@ class FinderViewModel : ViewModel() {
         if (!dropFile.exists() || !dropFile.isFile) {
             return
         }
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                analyse(targetDirFile)
-            }
 
+        checkHashMap()
+
+        val hashStr = dropFile.hashStr()
+        if (hashStrMap.contains(hashStr)) {
+            println("oops，已经有这个资源文件了！")
+        } else {
+            println("这个文件是新增的哦，是否重命名呢？")
         }
-
     }
 }
