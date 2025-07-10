@@ -206,9 +206,10 @@ class FinderViewModel : ViewModel() {
         }
     }
 
-    private fun renameFile(
+    fun copyFileToTargetDir(
         targetDirFile: File,
-        dropFile: File
+        dropFile: File,
+        newFileName: String,
     ) {
         if (!targetDirFile.exists() || !targetDirFile.isDirectory) {
             return
@@ -216,7 +217,7 @@ class FinderViewModel : ViewModel() {
         if (!dropFile.exists() || !dropFile.isFile) {
             return
         }
-        val newFile = File(targetDirFile, dropFile.name)
+        val newFile = File(targetDirFile, newFileName)
         dropFile.copyTo(newFile)
         println("拷贝文件成功！")
     }

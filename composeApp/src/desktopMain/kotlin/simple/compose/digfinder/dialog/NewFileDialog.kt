@@ -16,29 +16,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import coil3.compose.AsyncImage
+import simple.compose.digfinder.config.Dimens
 import simple.compose.digfinder.widget.DialogCard
+import java.io.File
 
 @Composable
 fun NewFileDialog(
+    dropFile: File,
     onDismissRequest: () -> Unit,
+    onSure: (newFileName: String) -> Unit = {}
 ) {
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
-        DialogContent()
+        DialogContent(dropFile, onSure)
     }
 }
 
 @Composable
-private fun DialogContent() {
-    var newFileNameState by remember { mutableStateOf("") }
+private fun DialogContent(
+    dropFile: File,
+    onSure: (newFileName: String) -> Unit = {}
+) {
+    var newFileNameState by remember { mutableStateOf(dropFile.nameWithoutExtension) }
 
     DialogCard {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().padding(10.dp)
+            modifier = Modifier.fillMaxWidth().padding(Dimens.dialogPadding)
         ) {
+            AsyncImage(
+                model = dropFile,
+                contentDescription = null,
+            )
             OutlinedTextField(
                 newFileNameState,
                 onValueChange = {
@@ -47,7 +59,7 @@ private fun DialogContent() {
                 modifier = Modifier.fillMaxWidth()
             )
             Button(onClick = {
-
+                onSure.invoke("$newFileNameState.${dropFile.extension}")
             }) {
                 Text(text = "Sure")
             }

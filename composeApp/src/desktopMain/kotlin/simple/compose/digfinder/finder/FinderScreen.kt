@@ -179,9 +179,14 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
 
     when (uiState) {
         is FinderUIState.ShowNewFileDialog -> {
+            val castState = (uiState as FinderUIState.ShowNewFileDialog)
             NewFileDialog(
+                castState.dropFile,
                 onDismissRequest = {
                     viewModel.updateUIState(FinderUIState.Default)
+                },
+                onSure = { newFileName ->
+                    viewModel.copyFileToTargetDir(castState.targetDirFile, castState.dropFile, newFileName)
                 }
             )
         }
