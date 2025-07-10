@@ -195,6 +195,22 @@ class FinderViewModel : ViewModel() {
             println("oops，已经有这个资源文件了！")
         } else {
             println("这个文件是新增的哦，是否重命名呢？")
+            renameFile(targetDirFile, dropFile)
         }
+    }
+
+    private fun renameFile(
+        targetDirFile: File,
+        dropFile: File
+    ) {
+        if (!targetDirFile.exists() || !targetDirFile.isDirectory) {
+            return
+        }
+        if (!dropFile.exists() || !dropFile.isFile) {
+            return
+        }
+        val newFile = File(targetDirFile, dropFile.name)
+        dropFile.copyTo(newFile)
+        println("拷贝文件成功！")
     }
 }

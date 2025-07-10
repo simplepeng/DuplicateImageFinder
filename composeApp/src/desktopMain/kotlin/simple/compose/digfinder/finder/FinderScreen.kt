@@ -82,7 +82,8 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
-                .padding(5.dp),
+                .padding(vertical = 10.dp, horizontal = 5.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             OutlinedTextField(
                 value = pathField,
@@ -134,7 +135,7 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
             }
             //
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(5.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxWidth().weight(1f)
             ) {
                 itemsIndexed(items = pathList, key = { index, item -> item.path }) { index, item ->
@@ -237,11 +238,12 @@ private fun PathItem(
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(start = 10.dp)
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 10.dp, top = 5.dp, bottom = 5.dp)
         ) {
             Text(
                 text = item.path,
-                modifier = Modifier
+                modifier = Modifier.weight(1f)
             )
             Checkbox(
                 checked = item.isChecked,
