@@ -1,10 +1,12 @@
 package simple.compose.digfinder.page.main
 
-sealed interface MainUIState {
+import simple.compose.digfinder.base.BaseUIState
+
+interface MainUIState : BaseUIState {
 
     data object Loading : MainUIState
 
     data object Content : MainUIState
 
-    data object AddProjectDialog: MainUIState
+    data object AddProjectDialog : MainUIState
 }
