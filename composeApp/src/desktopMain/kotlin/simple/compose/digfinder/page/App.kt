@@ -1,17 +1,15 @@
-package simple.compose.digfinder
+package simple.compose.digfinder.page
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simple.compose.digfinder.config.Router
-import simple.compose.digfinder.finder.FinderAction
-import simple.compose.digfinder.finder.FinderScreen
-import simple.compose.digfinder.main.MainAction
-import simple.compose.digfinder.main.MainScreen
-import simple.compose.digfinder.result.ResultDialog
+import simple.compose.digfinder.page.finder.FinderAction
+import simple.compose.digfinder.page.finder.FinderScreen
+import simple.compose.digfinder.page.main.MainAction
+import simple.compose.digfinder.page.main.MainScreen
 import simple.compose.digfinder.theme.AppTheme
 
 @Composable

@@ -1,4 +1,4 @@
-package simple.compose.digfinder.main
+package simple.compose.digfinder.page.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,5 +27,9 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             _uiState.tryEmit(state)
         }
+    }
+
+    fun addProject(projectName: String, projectPath: String){
+
     }
 }

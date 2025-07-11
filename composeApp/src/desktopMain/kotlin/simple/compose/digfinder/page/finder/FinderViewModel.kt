@@ -1,4 +1,4 @@
-package simple.compose.digfinder.finder
+package simple.compose.digfinder.page.finder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

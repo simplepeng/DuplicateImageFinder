@@ -1,4 +1,4 @@
-package simple.compose.digfinder.main
+package simple.compose.digfinder.page.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,11 +39,14 @@ fun MainScreen(
             AddProjectDialog(
                 onDismissRequest = {
                     viewModel.updateUIState(MainUIState.Content)
+                },
+                onConfirm = { projectName, projectPath ->
+                    viewModel.addProject(projectName, projectPath)
                 }
             )
         }
 
-        MainUIState.Content -> TODO()
+        MainUIState.Content -> {}
         MainUIState.Loading -> ContainedLoadingIndicator()
     }
 }

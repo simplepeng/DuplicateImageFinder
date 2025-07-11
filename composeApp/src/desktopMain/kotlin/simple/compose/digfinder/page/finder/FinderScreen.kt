@@ -1,6 +1,5 @@
-package simple.compose.digfinder.finder
+package simple.compose.digfinder.page.finder
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
@@ -17,7 +16,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,7 +42,7 @@ import simple.compose.digfinder.dialog.FileExistsDialog
 import simple.compose.digfinder.dialog.NewFileDialog
 import simple.compose.digfinder.dialog.NoDuplicateFilesDialog
 import simple.compose.digfinder.dialog.WatchingDialog
-import simple.compose.digfinder.result.ResultDialog
+import simple.compose.digfinder.page.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.Content

@@ -1,4 +1,4 @@
-package simple.compose.digfinder.result
+package simple.compose.digfinder.page.result
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
