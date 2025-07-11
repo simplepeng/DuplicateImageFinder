@@ -8,16 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import simple.compose.digfinder.base.BaseViewModel
 
-class MainViewModel : BaseViewModel<MainAction, MainUIState, MainIntent>() {
-
-    private val _uiState = MutableStateFlow<MainUIState>(MainUIState.Content)
-    val uiState = _uiState.asStateFlow()
-
-    override fun updateUIState(state: MainUIState) {
-        viewModelScope.launch {
-            _uiState.tryEmit(state)
-        }
-    }
+class MainViewModel : BaseViewModel<MainAction, MainUIState, MainIntent>(MainUIState.Content) {
 
     override fun performIntent(intent: MainIntent) {
 

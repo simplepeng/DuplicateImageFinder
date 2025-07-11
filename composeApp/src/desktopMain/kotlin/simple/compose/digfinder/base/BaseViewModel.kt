@@ -6,9 +6,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch 
+import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<Action : BaseAction, State : BaseUIState, Intent : BaseIntent> : ViewModel() {
+abstract class BaseViewModel<Action : BaseAction, State : BaseUIState, Intent : BaseIntent>(
+    initUIState: State
+) : ViewModel() {
 
     private val _actionState = MutableSharedFlow<Action>()
     val actionState = _actionState.asSharedFlow()
@@ -19,10 +21,12 @@ abstract class BaseViewModel<Action : BaseAction, State : BaseUIState, Intent : 
         }
     }
 
-    private val _uiState = MutableStateFlow(BaseUIState.Default)
+    private val _uiState = MutableStateFlow<State>(initUIState)
     val uiState = _uiState.asStateFlow()
 
-    abstract fun updateUIState(state: State)
+    fun updateUIState(state: State) {
+        _uiState.value = state
+    }
 
     abstract fun performIntent(intent: Intent)
 }
