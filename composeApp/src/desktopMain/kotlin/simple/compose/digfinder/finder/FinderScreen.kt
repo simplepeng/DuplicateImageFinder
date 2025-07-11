@@ -17,6 +17,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -84,7 +85,7 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
-                .padding(vertical = 10.dp, horizontal = 5.dp),
+                .padding(vertical = 10.dp, horizontal = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             OutlinedTextField(
@@ -274,6 +275,10 @@ private fun PathItem(
                 text = item.path,
                 modifier = Modifier.weight(1f)
             )
+//            Switch(
+//                checked = item.isChecked,
+//                onCheckedChange = onCheckedChange
+//            )
             Checkbox(
                 checked = item.isChecked,
                 onCheckedChange = {
