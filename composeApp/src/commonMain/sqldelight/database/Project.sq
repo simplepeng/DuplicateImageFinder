@@ -1,0 +1,13 @@
+CREATE TABLE Project (
+    id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
+    name TEXT NOT NULL,
+    path TEXT NOT NULL
+);
+
+selectAll:
+SELECT *
+FROM Project;
+
+insert:
+INSERT INTO Project(name,path)
+VALUES (?,?);

@@ -6,11 +6,12 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     kotlin("plugin.serialization") version "2.2.0"
+    id("app.cash.sqldelight") version "2.1.0"
 }
 
 kotlin {
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
 
@@ -32,6 +33,9 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
             implementation("io.coil-kt.coil3:coil-compose:3.2.0")
             implementation("io.github.ismai117:kottie:2.0.1")
+            implementation("app.cash.sqldelight:runtime:2.1.0")
+            implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
+            implementation("app.cash.sqldelight:sqlite-driver:2.1.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -39,10 +43,12 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+//            implementation("app.cash.sqldelight:runtime:2.1.0")
+//            implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
+//            implementation("app.cash.sqldelight:sqlite-driver:2.1.0")
         }
     }
 }
-
 
 compose.desktop {
     application {
@@ -52,6 +58,14 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "simple.compose.digfinder"
             packageVersion = "1.0.0"
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("database")
         }
     }
 }
