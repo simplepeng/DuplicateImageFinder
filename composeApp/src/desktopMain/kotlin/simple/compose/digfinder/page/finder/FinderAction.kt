@@ -1,6 +1,8 @@
 package simple.compose.digfinder.page.finder
 
-sealed interface FinderAction {
+import simple.compose.digfinder.base.BaseAction
+
+sealed interface FinderAction : BaseAction{
 
     data object Back : FinderAction
 

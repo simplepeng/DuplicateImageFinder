@@ -1,15 +1,13 @@
 package simple.compose.digfinder.page.finder
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import simple.compose.digfinder.base.BaseViewModel
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.data.PathWrapper
 import simple.compose.digfinder.ext.hashStr
@@ -20,30 +18,14 @@ import java.nio.file.Paths
 import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchEvent
 
-class FinderViewModel : ViewModel() {
+class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>(FinderUIState.Default) {
 
-    private val _actionState = MutableSharedFlow<FinderAction>()
-    val actionState = _actionState.asSharedFlow()
-
-    fun doAction(action: FinderAction) {
-        viewModelScope.launch {
-            _actionState.emit(action)
-        }
-    }
-
-    private val _uiState = MutableStateFlow<FinderUIState>(FinderUIState.Default)
-    val uiState = _uiState.asStateFlow()
-
-    fun updateUIState(state: FinderUIState) {
-        _uiState.value = state
-    }
-
-    fun performIntent(intent: FinderIntent) {
+    override fun performIntent(intent: FinderIntent) {
         when (intent) {
             is FinderIntent.AddPath -> addPath(intent.path)
             is FinderIntent.Scan -> scan(intent.pathList)
             is FinderIntent.UpdateChecked -> updateChecked(intent.index, intent.isChecked)
-            is FinderIntent.Watching -> _uiState.value = FinderUIState.Watching
+            is FinderIntent.Watching -> {}
             is FinderIntent.CheckDropFile -> checkDropFile(intent.targetDir, intent.dropFile)
         }
     }
@@ -69,7 +51,7 @@ class FinderViewModel : ViewModel() {
 
         hashStrMap.clear()
         duplicateFiles.clear()
-        _uiState.value = FinderUIState.Scanning
+        updateUIState(FinderUIState.Scanning)
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -80,11 +62,11 @@ class FinderViewModel : ViewModel() {
             }
 
             if (duplicateFiles.isEmpty()) {
-                _uiState.value = FinderUIState.DuplicateFilesIsEmpty
+                updateUIState(FinderUIState.DuplicateFilesIsEmpty)
                 return@launch
             }
 
-            _uiState.value = FinderUIState.ShowResultDialog(duplicateFiles.toList())
+            updateUIState(FinderUIState.ShowResultDialog(duplicateFiles.toList()))
         }
     }
 
@@ -147,7 +129,7 @@ class FinderViewModel : ViewModel() {
             return
         }
 
-        _uiState.value = FinderUIState.Watching
+        updateUIState(FinderUIState.Watching)
 
         pathList.forEach { wrapper ->
             val dirFile = File(wrapper.path)
@@ -198,11 +180,11 @@ class FinderViewModel : ViewModel() {
         if (hashStrMap.contains(hashStr)) {
             println("oops，已经有这个资源文件了！")
             hashStrMap.get(hashStr)?.let {
-                _uiState.value = FinderUIState.ShowFileExistsDialog(it)
+                updateUIState(FinderUIState.ShowFileExistsDialog(it))
             }
         } else {
             println("这个文件是新增的哦，是否重命名呢？")
-            _uiState.value = FinderUIState.ShowNewFileDialog(targetDirFile, dropFile)
+            updateUIState(FinderUIState.ShowNewFileDialog(targetDirFile, dropFile))
         }
     }
 

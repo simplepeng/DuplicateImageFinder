@@ -1,9 +1,10 @@
 package simple.compose.digfinder.page.finder
 
+import simple.compose.digfinder.base.BaseUIState
 import simple.compose.digfinder.data.DuplicateFile
 import java.io.File
 
-sealed interface FinderUIState {
+sealed interface FinderUIState : BaseUIState {
 
     data object Default : FinderUIState
 

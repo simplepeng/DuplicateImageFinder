@@ -1,9 +1,10 @@
 package simple.compose.digfinder.page.finder
 
+import simple.compose.digfinder.base.BaseIntent
 import simple.compose.digfinder.data.PathWrapper
 import java.io.File
 
-sealed interface FinderIntent {
+sealed interface FinderIntent : BaseIntent {
 
     data class AddPath(val path: String) : FinderIntent
 

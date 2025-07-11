@@ -21,7 +21,7 @@ abstract class BaseViewModel<Action : BaseAction, State : BaseUIState, Intent : 
         }
     }
 
-    private val _uiState = MutableStateFlow<State>(initUIState)
+    private val _uiState = MutableStateFlow(initUIState)
     val uiState = _uiState.asStateFlow()
 
     fun updateUIState(state: State) {
@@ -29,4 +29,5 @@ abstract class BaseViewModel<Action : BaseAction, State : BaseUIState, Intent : 
     }
 
     abstract fun performIntent(intent: Intent)
+
 }
