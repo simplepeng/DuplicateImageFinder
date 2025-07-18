@@ -8,5 +8,4 @@ interface MainUIState : BaseUIState {
 
     data object Content : MainUIState
 
-    data object AddProjectDialog : MainUIState
 }

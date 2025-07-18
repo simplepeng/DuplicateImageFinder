@@ -1,7 +1,8 @@
 CREATE TABLE Project (
     id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
     name TEXT NOT NULL,
-    path TEXT NOT NULL
+    path TEXT NOT NULL,
+    time INTEGER  NOT NULL
 );
 
 selectAll:
@@ -9,5 +10,9 @@ SELECT *
 FROM Project;
 
 insert:
-INSERT INTO Project(name,path)
-VALUES (?,?);
+INSERT INTO Project(name,path,time)
+VALUES (?,?,?);
+
+delete:
+DELETE FROM Project
+WHERE id = ?;
