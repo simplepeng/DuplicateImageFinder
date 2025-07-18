@@ -1,5 +1,6 @@
 package simple.compose.digfinder.page.main
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -89,7 +90,9 @@ private fun ScreenContent(
             items(
                 items = projectList,
                 key = { it.id }) { project ->
-                Item(item = project)
+                Item(item = project, onItemClick = { item ->
+                    viewModel.doAction(MainAction.NavToFinder(item))
+                })
             }
         }
 
@@ -108,13 +111,19 @@ private fun ScreenContent(
 }
 
 @Composable
-private fun Item(item: Project) {
+private fun Item(
+    item: Project,
+    onItemClick: (Project) -> Unit = {}
+) {
     AppCard(
         modifier = Modifier.fillMaxWidth()
+            .clickable {
+                onItemClick(item)
+            },
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
             Text(
                 text = item.name

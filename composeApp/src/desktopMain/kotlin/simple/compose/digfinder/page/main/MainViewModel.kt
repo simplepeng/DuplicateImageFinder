@@ -34,7 +34,9 @@ class MainViewModel : BaseViewModel<MainAction, MainUIState, MainIntent>(MainUIS
     }
 
     fun addProject(projectName: String, projectPath: String) {
-        DbHelper.add(projectName, projectPath)
+        viewModelScope.launch {
+            DbHelper.add(projectName, projectPath)
+        }
         getList()
     }
 

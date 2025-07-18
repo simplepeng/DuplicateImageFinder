@@ -43,9 +43,6 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
-//            implementation("app.cash.sqldelight:runtime:2.1.0")
-//            implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
-//            implementation("app.cash.sqldelight:sqlite-driver:2.1.0")
         }
     }
 }

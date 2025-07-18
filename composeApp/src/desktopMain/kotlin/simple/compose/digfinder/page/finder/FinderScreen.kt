@@ -33,6 +33,7 @@ import androidx.compose.ui.draganddrop.DragData
 import androidx.compose.ui.draganddrop.dragData
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import database.Project
 import duplicateimagefinder.composeapp.generated.resources.Res
 import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
@@ -51,6 +52,7 @@ import java.net.URI
 
 @Composable
 fun FinderScreen(
+    project: Project,
     viewModel: FinderViewModel = viewModel { FinderViewModel() },
     onAction: (FinderAction) -> Unit,
 ) {
@@ -60,11 +62,14 @@ fun FinderScreen(
         }
     }
 
-    FinderScreenContent(viewModel)
+    FinderScreenContent(project, viewModel)
 }
 
 @Composable
-fun FinderScreenContent(viewModel: FinderViewModel) {
+fun FinderScreenContent(
+    project: Project,
+    viewModel: FinderViewModel
+) {
     val uiState by viewModel.uiState.collectAsState()
     var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
 //    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/Calendar/phone/src/main/res/drawable-xxxhdpi") }
@@ -78,6 +83,11 @@ fun FinderScreenContent(viewModel: FinderViewModel) {
     Content(
         onBack = {
             viewModel.doAction(FinderAction.Back)
+        },
+        title = {
+            Text(
+                text = project.name
+            )
         },
         showLoading = uiState is FinderUIState.Scanning
     ) {

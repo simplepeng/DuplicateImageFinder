@@ -25,6 +25,7 @@ fun Content(
     onBack: () -> Unit = {},
     showLoading: Boolean = false,
     modifier: Modifier = Modifier.fillMaxSize(),
+    title: @Composable () -> Unit,
     content: @Composable BoxScope.() -> Unit,
 ) {
     Box(
@@ -44,12 +45,7 @@ fun Content(
                         }
                     )
                 },
-                title = {
-                    Text(
-                        text = "title",
-                        modifier = Modifier
-                    )
-                },
+                title = title,
                 modifier = Modifier.fillMaxWidth()
             )
             Box(

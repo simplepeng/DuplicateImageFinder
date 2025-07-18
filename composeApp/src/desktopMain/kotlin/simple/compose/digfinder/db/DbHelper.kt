@@ -17,14 +17,14 @@ object DbHelper {
         db.projectQueries.selectAll().executeAsList()
     }
 
-    fun add(
+    suspend fun add(
         name: String,
         path: String
     ) {
         db.projectQueries.insert(name, path, System.currentTimeMillis())
     }
 
-    fun delete(
+    suspend fun delete(
         id: Long
     ) {
         db.projectQueries.delete(id)
