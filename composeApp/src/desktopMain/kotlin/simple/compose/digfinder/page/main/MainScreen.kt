@@ -60,7 +60,7 @@ fun MainScreen(
         MainDialogState.AddProjectDialog -> {
             AddProjectDialog(
                 onDismissRequest = {
-                    viewModel.updateUIState(MainUIState.Content)
+                    viewModel.updateDialogState(MainDialogState.None)
                 },
                 onConfirm = { projectName, projectPath ->
                     viewModel.updateDialogState(MainDialogState.None)

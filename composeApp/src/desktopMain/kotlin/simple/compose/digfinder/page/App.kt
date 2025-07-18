@@ -4,13 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import database.Project
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simple.compose.digfinder.config.Router
-import simple.compose.digfinder.db.ProjectMapper
-import simple.compose.digfinder.page.finder.FinderAction
-import simple.compose.digfinder.page.finder.FinderScreen
 import simple.compose.digfinder.page.main.MainAction
 import simple.compose.digfinder.page.main.MainScreen
 import simple.compose.digfinder.theme.AppTheme
@@ -28,21 +23,21 @@ fun App() {
             composable<Router.Main> {
                 MainScreen(onAction = { action ->
                     when (action) {
-                        is MainAction.NavToFinder -> navController.navigate(
-                            Router.Finder(ProjectMapper.from(action.project))
-                        )
+                        is MainAction.NavToFinder -> {
+                            navController.navigate(Router.Finder(""))
+                        }
                     }
                 })
             }
             composable<Router.Finder> { backStackEntry ->
-                val projectMapper = backStackEntry.toRoute<ProjectMapper>()
-                FinderScreen(
-                    project = projectMapper.toProject(),
-                    onAction = { action ->
-                        when (action) {
-                            FinderAction.Back -> navController.navigateUp()
-                        }
-                    })
+//                val projectMapper = backStackEntry.toRoute<ProjectMapper>()
+//                FinderScreen(
+//                    project = projectMapper.toProject(),
+//                    onAction = { action ->
+//                        when (action) {
+//                            FinderAction.Back -> navController.navigateUp()
+//                        }
+//                    })
             }
         }
     }
