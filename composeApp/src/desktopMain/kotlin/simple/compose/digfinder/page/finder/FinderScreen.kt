@@ -52,7 +52,7 @@ import java.net.URI
 
 @Composable
 fun FinderScreen(
-    project: Project,
+    projectId: Long,
     viewModel: FinderViewModel = viewModel { FinderViewModel() },
     onAction: (FinderAction) -> Unit,
 ) {
@@ -62,12 +62,12 @@ fun FinderScreen(
         }
     }
 
-    FinderScreenContent(project, viewModel)
+    FinderScreenContent(projectId, viewModel)
 }
 
 @Composable
 fun FinderScreenContent(
-    project: Project,
+    projectId: Long,
     viewModel: FinderViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -86,7 +86,7 @@ fun FinderScreenContent(
         },
         title = {
             Text(
-                text = project.name
+                text = projectId.toString()
             )
         },
         showLoading = uiState is FinderUIState.Scanning

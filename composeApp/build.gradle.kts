@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
-    kotlin("plugin.serialization") version "2.2.0"
+    alias(libs.plugins.kotlinx.serialization)
     id("app.cash.sqldelight") version "2.1.0"
 }
 
@@ -30,7 +30,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta03")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+            implementation(libs.kotlinx.serialization.json)
             implementation("io.coil-kt.coil3:coil-compose:3.2.0")
             implementation("io.github.ismai117:kottie:2.0.1")
             implementation("app.cash.sqldelight:runtime:2.1.0")

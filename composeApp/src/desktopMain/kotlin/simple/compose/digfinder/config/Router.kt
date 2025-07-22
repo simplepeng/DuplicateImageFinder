@@ -8,6 +8,6 @@ sealed interface Router {
     data object Main : Router
 
     @Serializable
-    data class Finder(val json: String) : Router
+    data class Finder(val id: Long) : Router
 
 }
