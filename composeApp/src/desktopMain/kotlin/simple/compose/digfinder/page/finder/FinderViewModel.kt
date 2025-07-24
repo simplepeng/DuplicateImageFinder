@@ -100,7 +100,7 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
                 return@launch
             }
 
-            updateUIState(FinderUIState.ShowResultDialog(duplicateFiles.toList()))
+            updateDialogState(FinderDialogState.Result(duplicateFiles.toList()))
         }
     }
 

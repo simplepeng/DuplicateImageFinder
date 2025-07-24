@@ -81,6 +81,20 @@ fun FinderScreen(
 
         ScreenContent(project, viewModel)
     }
+
+    val dialogState by viewModel.dialogState.collectAsState()
+    when (dialogState) {
+        is FinderDialogState.Result -> {
+            ResultDialog(
+                onDismissRequest = {
+                    viewModel.updateDialogState(FinderDialogState.None)
+                },
+                duplicateFiles = (dialogState as FinderDialogState.Result).duplicateFiles
+            )
+        }
+
+        else -> {}
+    }
 }
 
 @Composable
@@ -93,7 +107,7 @@ fun ScreenContent(
     val pathList by viewModel.pathList.collectAsState()
 
     var showEmptyDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }
-    var showResultDialog by remember(uiState) { mutableStateOf(uiState is FinderUIState.ShowResultDialog) }
+//    var showResultDialog by remember(uiState) { mutableStateOf(uiState is FinderUIState.ShowResultDialog) }
     var showWatchingDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.Watching) }
 
     Content(
@@ -184,15 +198,6 @@ fun ScreenContent(
             onDismissRequest = {
                 showEmptyDialog = false
             }
-        )
-    }
-
-    if (showResultDialog) {
-        ResultDialog(
-            onDismissRequest = {
-                showResultDialog = false
-            },
-            duplicateFiles = (uiState as FinderUIState.ShowResultDialog).duplicateFiles
         )
     }
 
