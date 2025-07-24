@@ -36,6 +36,7 @@ kotlin {
             implementation("app.cash.sqldelight:runtime:2.1.0")
             implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
             implementation("app.cash.sqldelight:sqlite-driver:2.1.0")
+            implementation("org.jetbrains.compose.material3:material3:1.9.0-alpha04")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

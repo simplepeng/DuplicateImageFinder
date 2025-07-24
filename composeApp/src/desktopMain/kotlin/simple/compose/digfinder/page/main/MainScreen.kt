@@ -17,14 +17,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import database.Project
 import kotlinx.coroutines.flow.collectLatest
 import simple.compose.digfinder.dialog.AddProjectDialog
 import simple.compose.digfinder.widget.AppCard
+import simple.compose.digfinder.widget.LoadingIndicator
 
 @Composable
 fun MainScreen(
@@ -51,7 +50,7 @@ fun MainScreen(
 
         when (uiState) {
             MainUIState.Content -> {}
-            MainUIState.Loading -> {}
+            MainUIState.Loading -> LoadingIndicator()
         }
     }
 

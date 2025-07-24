@@ -55,7 +55,7 @@ fun Content(
             }
         }
         if (showLoading) {
-
+            LoadingIndicator()
         }
     }
 }
