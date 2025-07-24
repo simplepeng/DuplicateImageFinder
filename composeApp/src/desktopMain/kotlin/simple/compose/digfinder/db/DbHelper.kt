@@ -9,7 +9,7 @@ import java.util.Properties
 
 object DbHelper {
 
-    val driver: SqlDriver by lazy { JdbcSqliteDriver("jdbc:sqlite:test.db", Properties(), AppDatabase.Schema) }
+    val driver: SqlDriver by lazy { JdbcSqliteDriver("jdbc:sqlite:dig_finder.db", Properties(), AppDatabase.Schema) }
 
     val db: AppDatabase by lazy { AppDatabase(driver) }
 
