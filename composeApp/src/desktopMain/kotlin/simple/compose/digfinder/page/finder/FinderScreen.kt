@@ -152,13 +152,13 @@ fun ScreenContent(
                         text = "scan"
                     )
                 }
-                AppButton(onClick = {
-                    viewModel.performIntent(FinderIntent.Watching(pathList))
-                }) {
-                    Text(
-                        text = "watching"
-                    )
-                }
+//                AppButton(onClick = {
+//                    viewModel.performIntent(FinderIntent.Watching(pathList))
+//                }) {
+//                    Text(
+//                        text = "watching"
+//                    )
+//                }
             }
             //
             LazyColumn(
