@@ -20,7 +20,7 @@ class MainViewModel : BaseViewModel<MainAction, MainUIState, MainIntent>(MainUIS
     fun getList() {
         updateUIState(MainUIState.Loading)
         viewModelScope.launch {
-            val projectList = DbHelper.getList()
+            val projectList = DbHelper.getProjectList()
             _projectList.value = projectList
             updateUIState(MainUIState.Content)
         }
@@ -37,7 +37,7 @@ class MainViewModel : BaseViewModel<MainAction, MainUIState, MainIntent>(MainUIS
         if (projectName.isEmpty()) return
 
         viewModelScope.launch {
-            DbHelper.add(projectName, projectPath)
+            DbHelper.addProject(projectName, projectPath)
         }
         getList()
     }

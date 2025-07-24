@@ -13,18 +13,18 @@ object DbHelper {
 
     val db: AppDatabase by lazy { AppDatabase(driver) }
 
-    suspend fun getList() = withContext(Dispatchers.IO) {
+    suspend fun getProjectList() = withContext(Dispatchers.IO) {
         db.projectQueries.selectAll().executeAsList()
     }
 
-    suspend fun add(
+    suspend fun addProject(
         name: String,
         path: String
     ) {
         db.projectQueries.insert(name, path, System.currentTimeMillis())
     }
 
-    suspend fun delete(
+    suspend fun deleteProject(
         id: Long
     ) {
         db.projectQueries.delete(id)
@@ -32,5 +32,17 @@ object DbHelper {
 
     suspend fun getProject(id: Long) = withContext(Dispatchers.IO) {
         db.projectQueries.get(id).executeAsOne()
+    }
+
+    suspend fun getDirPathList(id: Long) = withContext(Dispatchers.IO) {
+        db.projectDirsQueries.getList(id).executeAsList()
+    }
+
+    suspend fun addDirPath(
+        projectId: Long,
+        path: String
+    ) = withContext(Dispatchers.IO) {
+        val id = db.projectDirsQueries.insert(projectId, path, System.currentTimeMillis()).await()
+        db.projectDirsQueries.get(id).executeAsOne()
     }
 }

@@ -1,6 +1,8 @@
 package simple.compose.digfinder.data
 
+import database.ProjectDirs
+
 data class PathWrapper(
-    val path: String,
-    val isChecked: Boolean = true,
+    val projectDirs: ProjectDirs,
+    val isChecked: Boolean = true
 )

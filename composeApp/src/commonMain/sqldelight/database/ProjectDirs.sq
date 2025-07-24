@@ -1,0 +1,25 @@
+CREATE TABLE ProjectDirs (
+    id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
+    projectId INTEGER NOT NULL,
+    dirPath TEXT NOT NULL,
+    time INTEGER  NOT NULL,
+    FOREIGN KEY (projectId) REFERENCES Project(id)
+);
+
+getList:
+SELECT *
+FROM ProjectDirs
+WHERE projectId = ?;
+
+get:
+SELECT *
+FROM ProjectDirs
+WHERE id = ?;
+
+insert:
+INSERT INTO ProjectDirs(projectId,dirPath,time)
+VALUES (?,?,?);
+
+delete:
+DELETE FROM ProjectDirs
+WHERE id = ?;

@@ -1,6 +1,7 @@
 package simple.compose.digfinder.page.finder
 
 import androidx.lifecycle.viewModelScope
+import database.Project
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,31 +35,46 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
         }
     }
 
-    private fun getProject(id: Long) {
-        updateUIState(FinderUIState.Loading)
-        viewModelScope.launch {
-            DbHelper.getProject(id)
-        }
-    }
-
-    private val _pathList = MutableStateFlow<List<PathWrapper>>(emptyList())
-    val pathList = _pathList.asStateFlow()
-
-    private fun addPath(path: String) {
-        if (path.isEmpty()) {
-            return
-        }
-        if (_pathList.value.map { it.path }.contains(path)) {
-            return
-        }
-        _pathList.value += PathWrapper(path)
-    }
-
     private val _dialogState = MutableStateFlow<FinderDialogState>(FinderDialogState.None)
     val dialogState = _dialogState.asStateFlow()
 
     fun updateDialogState(state: FinderDialogState) {
         _dialogState.value = state
+    }
+
+    private val _project = MutableStateFlow<Project?>(null)
+    val project = _project.asStateFlow()
+
+    private val _pathList = MutableStateFlow<List<PathWrapper>>(emptyList())
+    val pathList = _pathList.asStateFlow()
+
+    private fun getProject(id: Long) {
+        updateUIState(FinderUIState.Loading)
+        viewModelScope.launch {
+            DbHelper.getProject(id).also {
+                _project.value = it
+            }
+            val dirPathList = DbHelper.getDirPathList(id)
+            _pathList.value = dirPathList.map { PathWrapper(it) }
+            updateUIState(FinderUIState.Content)
+        }
+    }
+
+    private fun addPath(path: String) {
+        if (_project.value == null) {
+            return
+        }
+        if (path.isEmpty()) {
+            return
+        }
+        if (_pathList.value.map { it.projectDirs.dirPath }.contains(path)) {
+            return
+        }
+        viewModelScope.launch {
+            DbHelper.addDirPath(_project.value!!.id, path).also {
+                _pathList.value += PathWrapper(it)
+            }
+        }
     }
 
     private fun scan(pathList: List<PathWrapper>) {
@@ -74,7 +90,7 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 checkedList.forEach { wrapper ->
-                    val dirFile = File(wrapper.path)
+                    val dirFile = File(wrapper.projectDirs.dirPath)
                     analyse(dirFile)
                 }
             }
@@ -98,7 +114,7 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 checkedList.forEach { wrapper ->
-                    val dirFile = File(wrapper.path)
+                    val dirFile = File(wrapper.projectDirs.dirPath)
                     analyse(dirFile)
                 }
             }
@@ -150,9 +166,9 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
         updateUIState(FinderUIState.Watching)
 
         pathList.forEach { wrapper ->
-            val dirFile = File(wrapper.path)
+            val dirFile = File(wrapper.projectDirs.dirPath)
             if (dirFile.isDirectory) {
-                val directory = Paths.get(wrapper.path)
+                val directory = Paths.get(wrapper.projectDirs.dirPath)
                 val watchService = FileSystems.getDefault().newWatchService()
                 directory.register(watchService, StandardWatchEventKinds.ENTRY_CREATE)
 

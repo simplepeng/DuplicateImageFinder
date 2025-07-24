@@ -34,6 +34,7 @@ import androidx.compose.ui.draganddrop.DragData
 import androidx.compose.ui.draganddrop.dragData
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import database.Project
 import duplicateimagefinder.composeapp.generated.resources.Res
 import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
@@ -66,8 +67,8 @@ fun FinderScreen(
         viewModel.performIntent(FinderIntent.GetProject(projectId))
     }
 
-    val uiState = viewModel.uiState.collectAsState()
-
+    val uiState by viewModel.uiState.collectAsState()
+    val project by viewModel.project.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -78,18 +79,17 @@ fun FinderScreen(
             else -> {}
         }
 
-        ScreenContent(viewModel)
+        ScreenContent(project, viewModel)
     }
 }
 
 @Composable
 fun ScreenContent(
+    project: Project?,
     viewModel: FinderViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/BabyCarer/app/src/main/res/drawable-xxhdpi") }
-//    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/Calendar/phone/src/main/res/drawable-xxxhdpi") }
-//    var pathField by remember { mutableStateOf("/Users/simple/Desktop/worksapce/android/mooda/app/src/main/res/drawable-xxxhdpi") }
+    var pathField by remember { mutableStateOf("") }
     val pathList by viewModel.pathList.collectAsState()
 
     var showEmptyDialog by remember(uiState) { mutableStateOf(uiState == FinderUIState.DuplicateFilesIsEmpty) }
@@ -102,7 +102,7 @@ fun ScreenContent(
         },
         title = {
             Text(
-                text = ""
+                text = project?.name.orEmpty()
             )
         },
         showLoading = uiState is FinderUIState.Scanning
@@ -165,7 +165,7 @@ fun ScreenContent(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxWidth().weight(1f)
             ) {
-                itemsIndexed(items = pathList, key = { index, item -> item.path }) { index, item ->
+                itemsIndexed(items = pathList, key = { index, item -> item.projectDirs.id }) { index, item ->
                     PathItem(
                         item,
                         onCheckedChange = {
@@ -250,7 +250,7 @@ private fun PathItem(
                         File(URI(path)).also {
                             if (it.isFile && it.exists()) {
                                 println(it.absolutePath)
-                                onDropFile.invoke(item.path, it)
+                                onDropFile.invoke(item.projectDirs.dirPath, it)
                             }
                         }
                     }
@@ -296,7 +296,7 @@ private fun PathItem(
                 .padding(start = 10.dp, top = 5.dp, bottom = 5.dp)
         ) {
             Text(
-                text = item.path,
+                text = item.projectDirs.dirPath,
                 modifier = Modifier.weight(1f)
             )
 //            Switch(
