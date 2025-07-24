@@ -111,14 +111,18 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
     private fun checkHashMap() {
         if (hashStrMap.isNotEmpty()) return
 
-        val checkedList = _pathList.value.filter { it.isChecked }
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                checkedList.forEach { wrapper ->
-                    val dirFile = File(wrapper.projectDirs.dirPath)
-                    analyse(dirFile)
-                }
+                awaitAnalyse()
             }
+        }
+    }
+
+    private suspend fun awaitAnalyse() {
+        val checkedList = _pathList.value.filter { it.isChecked }
+        checkedList.forEach { wrapper ->
+            val dirFile = File(wrapper.projectDirs.dirPath)
+            analyse(dirFile)
         }
     }
 
@@ -209,17 +213,18 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
             return
         }
 
-        checkHashMap()
-
-        val hashStr = dropFile.hashStr()
-        if (hashStrMap.contains(hashStr)) {
-//            println("oops，已经有这个资源文件了！")
-            hashStrMap.get(hashStr)?.let {
-                updateDialogState(FinderDialogState.ShowFileExistsDialog(it))
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                awaitAnalyse()
             }
-        } else {
-//            println("这个文件是新增的哦，是否重命名呢？")
-            updateDialogState(FinderDialogState.ShowNewFileDialog(targetDirFile, dropFile))
+            val hashStr = dropFile.hashStr()
+            if (hashStrMap.contains(hashStr)) {
+                hashStrMap.get(hashStr)?.let {
+                    updateDialogState(FinderDialogState.ShowFileExistsDialog(it))
+                }
+            } else {
+                updateDialogState(FinderDialogState.ShowNewFileDialog(targetDirFile, dropFile))
+            }
         }
     }
 
