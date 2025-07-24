@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import simple.compose.digfinder.base.BaseViewModel
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.data.PathWrapper
+import simple.compose.digfinder.db.DbHelper
 import simple.compose.digfinder.ext.hashStr
 import java.io.File
 import java.nio.file.FileSystems
@@ -20,13 +21,22 @@ import java.nio.file.WatchEvent
 
 class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>(FinderUIState.Default) {
 
+
     override fun performIntent(intent: FinderIntent) {
         when (intent) {
+            is FinderIntent.GetProject -> getProject(intent.id)
             is FinderIntent.AddPath -> addPath(intent.path)
             is FinderIntent.Scan -> scan(intent.pathList)
             is FinderIntent.UpdateChecked -> updateChecked(intent.index, intent.isChecked)
             is FinderIntent.Watching -> {}
             is FinderIntent.CheckDropFile -> checkDropFile(intent.targetDir, intent.dropFile)
+        }
+    }
+
+    private fun getProject(id: Long) {
+        updateUIState(FinderUIState.Loading)
+        viewModelScope.launch {
+            DbHelper.getProject(id)
         }
     }
 

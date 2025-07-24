@@ -8,6 +8,10 @@ sealed interface FinderUIState : BaseUIState {
 
     data object Default : FinderUIState
 
+    data object Loading : FinderUIState
+
+    data object Content : FinderUIState
+
     data object Scanning : FinderUIState
 
     data object DuplicateFilesIsEmpty : FinderUIState

@@ -29,4 +29,8 @@ object DbHelper {
     ) {
         db.projectQueries.delete(id)
     }
+
+    suspend fun getProject(id: Long) = withContext(Dispatchers.IO) {
+        db.projectQueries.get(id).executeAsOne()
+    }
 }

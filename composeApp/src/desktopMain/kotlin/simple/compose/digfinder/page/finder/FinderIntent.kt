@@ -6,6 +6,8 @@ import java.io.File
 
 sealed interface FinderIntent : BaseIntent {
 
+    data class GetProject(val id: Long) : FinderIntent
+
     data class AddPath(val path: String) : FinderIntent
 
     data class Scan(val pathList: List<PathWrapper>) : FinderIntent

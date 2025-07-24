@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,7 +34,6 @@ import androidx.compose.ui.draganddrop.DragData
 import androidx.compose.ui.draganddrop.dragData
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import database.Project
 import duplicateimagefinder.composeapp.generated.resources.Res
 import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
@@ -47,6 +47,7 @@ import simple.compose.digfinder.page.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.Content
+import simple.compose.digfinder.widget.LoadingIndicator
 import java.io.File
 import java.net.URI
 
@@ -61,13 +62,27 @@ fun FinderScreen(
             onAction(it)
         }
     }
+    LaunchedEffect(projectId) {
+        viewModel.performIntent(FinderIntent.GetProject(projectId))
+    }
 
-    FinderScreenContent(projectId, viewModel)
+    val uiState = viewModel.uiState.collectAsState()
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        when (uiState) {
+            FinderUIState.Loading -> LoadingIndicator()
+            else -> {}
+        }
+
+        ScreenContent(viewModel)
+    }
 }
 
 @Composable
-fun FinderScreenContent(
-    projectId: Long,
+fun ScreenContent(
     viewModel: FinderViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -86,7 +101,7 @@ fun FinderScreenContent(
         },
         title = {
             Text(
-                text = projectId.toString()
+                text = ""
             )
         },
         showLoading = uiState is FinderUIState.Scanning

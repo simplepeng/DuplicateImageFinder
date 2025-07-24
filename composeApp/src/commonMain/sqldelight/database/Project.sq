@@ -16,3 +16,8 @@ VALUES (?,?,?);
 delete:
 DELETE FROM Project
 WHERE id = ?;
+
+get:
+SELECT *
+FROM Project
+WHERE id = ?;
