@@ -101,6 +101,28 @@ fun FinderScreen(
             )
         }
 
+        is FinderDialogState.ShowNewFileDialog -> {
+            val state = (dialogState as FinderDialogState.ShowNewFileDialog)
+            NewFileDialog(
+                state.dropFile,
+                onDismissRequest = {
+                    viewModel.updateDialogState(FinderDialogState.None)
+                },
+                onSure = { newFileName ->
+                    viewModel.copyFileToTargetDir(state.targetDirFile, state.dropFile, newFileName)
+                    viewModel.updateDialogState(FinderDialogState.None)
+                }
+            )
+        }
+
+        is FinderDialogState.ShowFileExistsDialog -> {
+            FileExistsDialog(
+                (dialogState as FinderDialogState.ShowFileExistsDialog).file,
+                onDismissRequest = {
+                    viewModel.updateDialogState(FinderDialogState.None)
+                })
+        }
+
         else -> {}
     }
 }
@@ -194,33 +216,6 @@ fun ScreenContent(
                         })
                 }
             }
-        }
-    }
-
-    when (uiState) {
-        is FinderUIState.ShowNewFileDialog -> {
-            val castState = (uiState as FinderUIState.ShowNewFileDialog)
-            NewFileDialog(
-                castState.dropFile,
-                onDismissRequest = {
-                    viewModel.updateUIState(FinderUIState.Default)
-                },
-                onSure = { newFileName ->
-                    viewModel.copyFileToTargetDir(castState.targetDirFile, castState.dropFile, newFileName)
-                }
-            )
-        }
-
-        is FinderUIState.ShowFileExistsDialog -> {
-            FileExistsDialog(
-                (uiState as FinderUIState.ShowFileExistsDialog).file,
-                onDismissRequest = {
-                    viewModel.updateUIState(FinderUIState.Default)
-                })
-        }
-
-        else -> {
-
         }
     }
 }
