@@ -14,8 +14,6 @@ sealed interface FinderUIState : BaseUIState {
 
     data object Scanning : FinderUIState
 
-    data object DuplicateFilesIsEmpty : FinderUIState
-
     data object Watching : FinderUIState
 
     data class ShowNewFileDialog(val targetDirFile: File, val dropFile: File) : FinderUIState

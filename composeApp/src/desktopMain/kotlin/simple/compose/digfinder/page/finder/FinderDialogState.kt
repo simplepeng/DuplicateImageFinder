@@ -7,4 +7,6 @@ sealed interface FinderDialogState {
     data object None : FinderDialogState
 
     data class Result(val duplicateFiles: List<DuplicateFile>) : FinderDialogState
+
+    data object Empty : FinderDialogState
 }

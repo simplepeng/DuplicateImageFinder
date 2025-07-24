@@ -94,9 +94,10 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
                     analyse(dirFile)
                 }
             }
+            updateUIState(FinderUIState.Default)
 
             if (duplicateFiles.isEmpty()) {
-                updateUIState(FinderUIState.DuplicateFilesIsEmpty)
+                updateDialogState(FinderDialogState.Empty)
                 return@launch
             }
 
