@@ -68,6 +68,7 @@ fun FinderScreen(
 
     val uiState = viewModel.uiState.collectAsState()
 
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

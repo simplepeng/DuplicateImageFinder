@@ -12,6 +12,7 @@ import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.data.PathWrapper
 import simple.compose.digfinder.db.DbHelper
 import simple.compose.digfinder.ext.hashStr
+import simple.compose.digfinder.page.main.MainDialogState
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.Path
@@ -51,6 +52,13 @@ class FinderViewModel : BaseViewModel<FinderAction, FinderUIState, FinderIntent>
             return
         }
         _pathList.value += PathWrapper(path)
+    }
+
+    private val _dialogState = MutableStateFlow<FinderDialogState>(FinderDialogState.None)
+    val dialogState = _dialogState.asStateFlow()
+
+    fun updateDialogState(state: FinderDialogState) {
+        _dialogState.value = state
     }
 
     private fun scan(pathList: List<PathWrapper>) {
