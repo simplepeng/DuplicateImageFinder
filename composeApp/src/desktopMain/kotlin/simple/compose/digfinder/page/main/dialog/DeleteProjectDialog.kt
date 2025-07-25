@@ -1,4 +1,4 @@
-package simple.compose.digfinder.page.main
+package simple.compose.digfinder.page.main.dialog
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

@@ -40,6 +40,9 @@ import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.data.PathWrapper
+import simple.compose.digfinder.page.finder.dialog.FileExistsDialog
+import simple.compose.digfinder.page.finder.dialog.NewFileDialog
+import simple.compose.digfinder.page.finder.dialog.NoDuplicateFilesDialog
 import simple.compose.digfinder.page.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
@@ -50,144 +53,144 @@ import java.net.URI
 
 @Composable
 fun FinderScreen(
-    projectId: Long,
-    viewModel: FinderViewModel = viewModel { FinderViewModel() },
-    onAction: (FinderAction) -> Unit,
+   projectId: Long,
+   viewModel: FinderViewModel = viewModel { FinderViewModel() },
+   onAction: (FinderAction) -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.actionState.collectLatest {
-            onAction(it)
-        }
-    }
-    LaunchedEffect(projectId) {
-        viewModel.performIntent(FinderIntent.GetProject(projectId))
-    }
+   LaunchedEffect(Unit) {
+      viewModel.actionState.collectLatest {
+         onAction(it)
+      }
+   }
+   LaunchedEffect(projectId) {
+      viewModel.performIntent(FinderIntent.GetProject(projectId))
+   }
 
-    val uiState by viewModel.uiState.collectAsState()
-    val project by viewModel.project.collectAsState()
+   val uiState by viewModel.uiState.collectAsState()
+   val project by viewModel.project.collectAsState()
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        when (uiState) {
-            FinderUIState.Loading -> LoadingIndicator()
-            else -> {}
-        }
+   Box(
+      modifier = Modifier.fillMaxSize(),
+      contentAlignment = Alignment.Center
+   ) {
+      when (uiState) {
+         FinderUIState.Loading -> LoadingIndicator()
+         else -> {}
+      }
 
-        ScreenContent(project, viewModel)
-    }
+      ScreenContent(project, viewModel)
+   }
 
-    val dialogState by viewModel.dialogState.collectAsState()
-    when (dialogState) {
-        is FinderDialogState.Result -> {
-            ResultDialog(
-                onDismissRequest = {
-                    viewModel.updateDialogState(FinderDialogState.None)
-                },
-                duplicateFiles = (dialogState as FinderDialogState.Result).duplicateFiles
-            )
-        }
+   val dialogState by viewModel.dialogState.collectAsState()
+   when (dialogState) {
+      is FinderDialogState.Result -> {
+         ResultDialog(
+            onDismissRequest = {
+               viewModel.updateDialogState(FinderDialogState.None)
+            },
+            duplicateFiles = (dialogState as FinderDialogState.Result).duplicateFiles
+         )
+      }
 
-        FinderDialogState.Empty -> {
-            NoDuplicateFilesDialog(
-                onDismissRequest = {
-                    viewModel.updateDialogState(FinderDialogState.None)
-                }
-            )
-        }
+      FinderDialogState.Empty -> {
+         NoDuplicateFilesDialog(
+            onDismissRequest = {
+               viewModel.updateDialogState(FinderDialogState.None)
+            }
+         )
+      }
 
-        is FinderDialogState.ShowNewFileDialog -> {
-            val state = (dialogState as FinderDialogState.ShowNewFileDialog)
-            NewFileDialog(
-                state.dropFile,
-                onDismissRequest = {
-                    viewModel.updateDialogState(FinderDialogState.None)
-                },
-                onSure = { newFileName ->
-                    viewModel.copyFileToTargetDir(state.targetDirFile, state.dropFile, newFileName)
-                    viewModel.updateDialogState(FinderDialogState.None)
-                }
-            )
-        }
+      is FinderDialogState.ShowNewFileDialog -> {
+         val state = (dialogState as FinderDialogState.ShowNewFileDialog)
+         NewFileDialog(
+            state.dropFile,
+            onDismissRequest = {
+               viewModel.updateDialogState(FinderDialogState.None)
+            },
+            onSure = { newFileName ->
+               viewModel.copyFileToTargetDir(state.targetDirFile, state.dropFile, newFileName)
+               viewModel.updateDialogState(FinderDialogState.None)
+            }
+         )
+      }
 
-        is FinderDialogState.ShowFileExistsDialog -> {
-            FileExistsDialog(
-                (dialogState as FinderDialogState.ShowFileExistsDialog).file,
-                onDismissRequest = {
-                    viewModel.updateDialogState(FinderDialogState.None)
-                })
-        }
+      is FinderDialogState.ShowFileExistsDialog -> {
+         FileExistsDialog(
+            (dialogState as FinderDialogState.ShowFileExistsDialog).file,
+            onDismissRequest = {
+               viewModel.updateDialogState(FinderDialogState.None)
+            })
+      }
 
-        else -> {}
-    }
+      else -> {}
+   }
 }
 
 @Composable
 fun ScreenContent(
-    project: Project?,
-    viewModel: FinderViewModel
+   project: Project?,
+   viewModel: FinderViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    var pathField by remember { mutableStateOf("") }
-    val pathList by viewModel.pathList.collectAsState()
+   val uiState by viewModel.uiState.collectAsState()
+   var path by remember { mutableStateOf("") }
+   val pathList by viewModel.pathList.collectAsState()
 
-    Content(
-        onBack = {
-            viewModel.doAction(FinderAction.Back)
-        },
-        title = {
-            Text(
-                text = project?.name.orEmpty()
-            )
-        },
-        showLoading = uiState is FinderUIState.Scanning
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(vertical = 10.dp, horizontal = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            OutlinedTextField(
-                value = pathField,
-                onValueChange = {
-                    pathField = it
-                },
-                label = {
-                    Text(
-                        text = "path"
-                    )
-                },
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_clear),
-                        contentDescription = null,
-                        modifier = Modifier.clickable {
-                            pathField = ""
-                        }.padding(5.dp)
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            //
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                AppButton(onClick = {
-                    viewModel.performIntent(FinderIntent.AddPath(pathField))
-                }) {
-                    Text(
-                        text = "add"
-                    )
-                }
-                AppButton(onClick = {
-                    viewModel.performIntent(FinderIntent.Scan(pathList))
-                }) {
-                    Text(
-                        text = "scan"
-                    )
-                }
+   Content(
+      onBack = {
+         viewModel.doAction(FinderAction.Back)
+      },
+      title = {
+         Text(
+            text = project?.name.orEmpty()
+         )
+      },
+      showLoading = uiState is FinderUIState.Scanning
+   ) {
+      Column(
+         modifier = Modifier.fillMaxSize()
+            .padding(vertical = 10.dp, horizontal = 10.dp),
+         verticalArrangement = Arrangement.spacedBy(10.dp)
+      ) {
+         OutlinedTextField(
+            value = path,
+            onValueChange = {
+               path = it
+            },
+            label = {
+               Text(
+                  text = "path"
+               )
+            },
+            trailingIcon = {
+               Icon(
+                  painter = painterResource(Res.drawable.ic_clear),
+                  contentDescription = null,
+                  modifier = Modifier.clickable {
+                     path = ""
+                  }.padding(5.dp)
+               )
+            },
+            modifier = Modifier.fillMaxWidth()
+         )
+         //
+         Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+         ) {
+            AppButton(onClick = {
+               viewModel.performIntent(FinderIntent.AddPath(path))
+            }) {
+               Text(
+                  text = "add"
+               )
+            }
+            AppButton(onClick = {
+               viewModel.performIntent(FinderIntent.Scan(pathList))
+            }) {
+               Text(
+                  text = "scan"
+               )
+            }
 //                AppButton(onClick = {
 //                    viewModel.performIntent(FinderIntent.Watching(pathList))
 //                }) {
@@ -195,106 +198,109 @@ fun ScreenContent(
 //                        text = "watching"
 //                    )
 //                }
+         }
+         //
+         LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxWidth().weight(1f)
+         ) {
+            itemsIndexed(
+               items = pathList,
+//               key = { index, item -> item.projectDirs.id }
+            ) { index, item ->
+               PathItem(
+                  item,
+                  onCheckedChange = {
+                     viewModel.performIntent(FinderIntent.UpdateChecked(index, it))
+                  },
+                  onDropFile = { targetDir, dropFile ->
+                     viewModel.performIntent(FinderIntent.CheckDropFile(targetDir, dropFile))
+                  })
             }
-            //
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.fillMaxWidth().weight(1f)
-            ) {
-                itemsIndexed(items = pathList, key = { index, item -> item.projectDirs.id }) { index, item ->
-                    PathItem(
-                        item,
-                        onCheckedChange = {
-                            viewModel.performIntent(FinderIntent.UpdateChecked(index, it))
-                        },
-                        onDropFile = { targetDir, dropFile ->
-                            viewModel.performIntent(FinderIntent.CheckDropFile(targetDir, dropFile))
-                        })
-                }
-            }
-        }
-    }
+         }
+      }
+   }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PathItem(
-    item: PathWrapper,
-    onCheckedChange: (Boolean) -> Unit,
-    onDropFile: (targetDir: String, dropFile: File) -> Unit = { _, _ -> },
+   item: PathWrapper,
+   onCheckedChange: (Boolean) -> Unit,
+   onDropFile: (targetDir: String, dropFile: File) -> Unit = { _, _ -> },
 ) {
-    var showTargetBorder by remember { mutableStateOf(false) }
-    val dragAndDropTarget = remember {
-        object : DragAndDropTarget {
+   var showTargetBorder by remember { mutableStateOf(false) }
+   val dragAndDropTarget = remember {
+      object : DragAndDropTarget {
 
-            override fun onDrop(event: DragAndDropEvent): Boolean {
-                println("Action at the target: ${event.action}")
-                val dragData = event.dragData()
-                if (dragData is DragData.FilesList) {
-                    dragData.readFiles().forEach { path ->
-                        println(path)
-                        File(URI(path)).also {
-                            if (it.isFile && it.exists()) {
-                                println(it.absolutePath)
-                                onDropFile.invoke(item.projectDirs.dirPath, it)
-                            }
-                        }
-                    }
-                }
-                return true
+         override fun onDrop(event: DragAndDropEvent): Boolean {
+            println("Action at the target: ${event.action}")
+            val dragData = event.dragData()
+            if (dragData is DragData.FilesList) {
+               dragData.readFiles().forEach { path ->
+                  println(path)
+                  File(URI(path)).also {
+                     if (it.isFile && it.exists()) {
+                        println(it.absolutePath)
+                        onDropFile.invoke(item.projectDirs.dirPath, it)
+                     }
+                  }
+               }
             }
+            return true
+         }
 
-            override fun onEntered(event: DragAndDropEvent) {
-                showTargetBorder = true
-            }
+         override fun onEntered(event: DragAndDropEvent) {
+            showTargetBorder = true
+         }
 
-            override fun onExited(event: DragAndDropEvent) {
-                showTargetBorder = false
-            }
+         override fun onExited(event: DragAndDropEvent) {
+            showTargetBorder = false
+         }
 
-            override fun onEnded(event: DragAndDropEvent) {
-                showTargetBorder = false
-            }
-        }
-    }
+         override fun onEnded(event: DragAndDropEvent) {
+            showTargetBorder = false
+         }
+      }
+   }
 
-    AppCard(
-        modifier = Modifier.fillMaxWidth()
-            .then(
-                if (showTargetBorder)
-                    Modifier.border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(15.dp)
-                    )
-                else
-                    Modifier
-            )
-            .dragAndDropTarget(
-                shouldStartDragAndDrop = { true },
-                target = dragAndDropTarget
-            )
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-                .padding(start = 10.dp, top = 5.dp, bottom = 5.dp)
-        ) {
-            Text(
-                text = item.projectDirs.dirPath,
-                modifier = Modifier.weight(1f)
-            )
+   AppCard(
+      modifier = Modifier.fillMaxWidth()
+         .then(
+            if (showTargetBorder)
+               Modifier.border(
+                  width = 1.dp,
+                  color = MaterialTheme.colorScheme.primary,
+                  shape = RoundedCornerShape(15.dp)
+               )
+            else
+               Modifier
+         )
+         .dragAndDropTarget(
+            shouldStartDragAndDrop = { true },
+            target = dragAndDropTarget
+         )
+   ) {
+      Row(
+         horizontalArrangement = Arrangement.SpaceBetween,
+         verticalAlignment = Alignment.CenterVertically,
+         modifier = Modifier.fillMaxWidth()
+            .padding(start = 10.dp, top = 5.dp, bottom = 5.dp)
+      ) {
+         Text(
+            text = item.projectDirs.dirPath,
+            modifier = Modifier.weight(1f)
+         )
 //            Switch(
 //                checked = item.isChecked,
 //                onCheckedChange = onCheckedChange
 //            )
-            Checkbox(
-                checked = item.isChecked,
-                onCheckedChange = {
-                    onCheckedChange.invoke(it)
-                }
-            )
-        }
-    }
+         Checkbox(
+            checked = item.isChecked,
+            onCheckedChange = {
+               onCheckedChange.invoke(it)
+            }
+         )
+      }
+   }
 }

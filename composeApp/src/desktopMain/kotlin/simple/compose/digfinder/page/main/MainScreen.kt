@@ -26,6 +26,8 @@ import duplicateimagefinder.composeapp.generated.resources.Res
 import duplicateimagefinder.composeapp.generated.resources.ic_delete
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
+import simple.compose.digfinder.page.main.dialog.AddProjectDialog
+import simple.compose.digfinder.page.main.dialog.DeleteProjectDialog
 import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.LoadingIndicator
 

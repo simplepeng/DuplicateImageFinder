@@ -1,4 +1,4 @@
-package simple.compose.digfinder.page.finder
+package simple.compose.digfinder.page.finder.dialog
 
 import KottieAnimation
 import androidx.compose.foundation.layout.Arrangement
