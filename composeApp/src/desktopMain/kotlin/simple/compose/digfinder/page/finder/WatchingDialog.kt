@@ -1,4 +1,4 @@
-package simple.compose.digfinder.dialog
+package simple.compose.digfinder.page.finder
 
 import KottieAnimation
 import androidx.compose.foundation.background
@@ -25,7 +25,6 @@ import duplicateimagefinder.composeapp.generated.resources.Res
 import kottieComposition.KottieCompositionSpec
 import kottieComposition.animateKottieCompositionAsState
 import kottieComposition.rememberKottieComposition
-import simple.compose.digfinder.ext.debugBackground
 import simple.compose.digfinder.widget.AppButton
 import utils.KottieConstants
 

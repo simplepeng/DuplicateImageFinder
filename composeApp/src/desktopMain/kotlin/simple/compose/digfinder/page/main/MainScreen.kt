@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,112 +22,145 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import database.Project
+import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.ic_delete
 import kotlinx.coroutines.flow.collectLatest
-import simple.compose.digfinder.dialog.AddProjectDialog
+import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.LoadingIndicator
 
 @Composable
 fun MainScreen(
-    onAction: (MainAction) -> Unit,
-    viewModel: MainViewModel = viewModel { MainViewModel() }
+   onAction: (MainAction) -> Unit,
+   viewModel: MainViewModel = viewModel { MainViewModel() }
 ) {
-    LaunchedEffect(viewModel.actionState) {
-        viewModel.actionState.collectLatest {
-            onAction(it)
-        }
-    }
-    LaunchedEffect(Unit) {
-        viewModel.getList()
-    }
+   LaunchedEffect(viewModel.actionState) {
+      viewModel.actionState.collectLatest {
+         onAction(it)
+      }
+   }
+   LaunchedEffect(Unit) {
+      viewModel.performIntent(MainIntent.GetList)
+   }
 
-    val uiState by viewModel.uiState.collectAsState()
-    val dialogState by viewModel.dialogState.collectAsState()
+   val uiState by viewModel.uiState.collectAsState()
+   val dialogState by viewModel.dialogState.collectAsState()
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        ScreenContent(viewModel)
+   Box(
+      modifier = Modifier.fillMaxSize(),
+      contentAlignment = Alignment.Center,
+   ) {
+      ScreenContent(viewModel)
 
-        when (uiState) {
-            MainUIState.Content -> {}
-            MainUIState.Loading -> LoadingIndicator()
-        }
-    }
+      when (uiState) {
+         MainUIState.Content -> {}
+         MainUIState.Loading -> LoadingIndicator()
+      }
+   }
 
-    when (dialogState) {
-        MainDialogState.AddProjectDialog -> {
-            AddProjectDialog(
-                onDismissRequest = {
-                    viewModel.updateDialogState(MainDialogState.None)
-                },
-                onConfirm = { projectName, projectPath ->
-                    viewModel.updateDialogState(MainDialogState.None)
-                    viewModel.addProject(projectName, projectPath)
-                }
-            )
-        }
+   when (dialogState) {
+      MainDialogState.None -> {}
 
-        MainDialogState.None -> {}
-    }
+      MainDialogState.AddProjectDialog -> {
+         AddProjectDialog(
+            onDismissRequest = {
+               viewModel.updateDialogState(MainDialogState.None)
+            },
+            onConfirm = { projectName, projectPath ->
+               viewModel.updateDialogState(MainDialogState.None)
+               viewModel.performIntent(MainIntent.AddProject(projectName, projectPath))
+            }
+         )
+      }
+
+      is MainDialogState.DeleteProjectDialog -> {
+         val project = (dialogState as MainDialogState.DeleteProjectDialog).project
+         DeleteProjectDialog(
+            projectName = project.name,
+            onDismissRequest = {
+               viewModel.updateDialogState(MainDialogState.None)
+            },
+            onConfirm = {
+               viewModel.updateDialogState(MainDialogState.None)
+               viewModel.performIntent(MainIntent.DeleteProject(project.id))
+            }
+         )
+      }
+   }
 }
 
 @Composable
 private fun ScreenContent(
-    viewModel: MainViewModel
+   viewModel: MainViewModel
 ) {
-    val projectList by viewModel.projectList.collectAsState()
+   val projectList by viewModel.projectList.collectAsState()
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            items(
-                items = projectList,
-                key = { it.id }) { project ->
-                Item(item = project, onItemClick = { item ->
-                    viewModel.doAction(MainAction.NavToFinder(item))
-                })
-            }
-        }
-
-        ExtendedFloatingActionButton(
-            modifier = Modifier.align(Alignment.BottomEnd)
-                .padding(bottom = 20.dp, end = 20.dp),
-            onClick = {
-                viewModel.updateDialogState(MainDialogState.AddProjectDialog)
-            },
-        ) {
-            Text(
-                text = "Add"
+   Box(
+      modifier = Modifier.fillMaxSize()
+   ) {
+      LazyColumn(
+         modifier = Modifier.fillMaxSize(),
+         contentPadding = PaddingValues(16.dp),
+         verticalArrangement = Arrangement.spacedBy(10.dp)
+      ) {
+         items(
+            items = projectList,
+            key = { it.id }) { project ->
+            Item(
+               item = project,
+               onItemClick = { item ->
+                  viewModel.doAction(MainAction.NavToFinder(item))
+               },
+               onDeleteClick = { item ->
+                  viewModel.updateDialogState(MainDialogState.DeleteProjectDialog(item))
+               }
             )
-        }
-    }
+         }
+      }
+
+      ExtendedFloatingActionButton(
+         modifier = Modifier.align(Alignment.BottomEnd)
+            .padding(bottom = 20.dp, end = 20.dp),
+         onClick = {
+            viewModel.updateDialogState(MainDialogState.AddProjectDialog)
+         },
+      ) {
+         Text(
+            text = "Add"
+         )
+      }
+   }
 }
 
 @Composable
 private fun Item(
-    item: Project,
-    onItemClick: (Project) -> Unit = {}
+   item: Project,
+   onItemClick: (Project) -> Unit = {},
+   onDeleteClick: (Project) -> Unit = {},
 ) {
-    AppCard(
-        modifier = Modifier.fillMaxWidth()
-            .clickable {
-                onItemClick(item)
-            },
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            Text(
-                text = item.name
-            )
-        }
-    }
+   AppCard(
+      modifier = Modifier.fillMaxWidth()
+         .clickable {
+            onItemClick(item)
+         },
+   ) {
+      Box(
+         modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+      ) {
+         Text(
+            text = item.name
+         )
+         Icon(
+            painter = painterResource(Res.drawable.ic_delete),
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterEnd)
+               .size(25.dp)
+               .clickable {
+                  onDeleteClick.invoke(item)
+               }
+               .padding(3.dp)
+         )
+      }
+   }
 }

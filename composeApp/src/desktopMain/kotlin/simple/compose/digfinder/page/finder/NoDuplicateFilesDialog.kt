@@ -1,4 +1,4 @@
-package simple.compose.digfinder.dialog
+package simple.compose.digfinder.page.finder
 
 import KottieAnimation
 import androidx.compose.foundation.layout.Arrangement
@@ -18,12 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import duplicateimagefinder.composeapp.generated.resources.Res
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kottieComposition.KottieCompositionSpec
 import kottieComposition.animateKottieCompositionAsState
 import kottieComposition.rememberKottieComposition
-import simple.compose.digfinder.ext.debugBackground
-import utils.KottieConstants
 
 @Composable
 fun NoDuplicateFilesDialog(

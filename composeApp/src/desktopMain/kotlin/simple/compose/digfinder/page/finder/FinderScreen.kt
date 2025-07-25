@@ -40,10 +40,6 @@ import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.data.PathWrapper
-import simple.compose.digfinder.dialog.FileExistsDialog
-import simple.compose.digfinder.dialog.NewFileDialog
-import simple.compose.digfinder.dialog.NoDuplicateFilesDialog
-import simple.compose.digfinder.dialog.WatchingDialog
 import simple.compose.digfinder.page.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
