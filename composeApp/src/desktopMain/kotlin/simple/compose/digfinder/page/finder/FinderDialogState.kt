@@ -1,17 +1,18 @@
 package simple.compose.digfinder.page.finder
 
+import simple.compose.digfinder.base.BaseDialogState
 import simple.compose.digfinder.data.DuplicateFile
 import java.io.File
 
-sealed interface FinderDialogState {
+sealed interface FinderDialogState : BaseDialogState {
 
-    data object None : FinderDialogState
+   data object None : FinderDialogState
 
-    data class Result(val duplicateFiles: List<DuplicateFile>) : FinderDialogState
+   data class Result(val duplicateFiles: List<DuplicateFile>) : FinderDialogState
 
-    data object Empty : FinderDialogState
+   data object Empty : FinderDialogState
 
-    data class ShowNewFileDialog(val targetDirFile: File, val dropFile: File) : FinderDialogState
+   data class ShowNewFileDialog(val targetDirFile: File, val dropFile: File) : FinderDialogState
 
-    data class ShowFileExistsDialog(val file: DuplicateFile.File) : FinderDialogState
+   data class ShowFileExistsDialog(val file: DuplicateFile.File) : FinderDialogState
 }

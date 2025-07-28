@@ -8,7 +8,10 @@ import kotlinx.coroutines.launch
 import simple.compose.digfinder.base.BaseViewModel
 import simple.compose.digfinder.db.DbHelper
 
-class MainViewModel : BaseViewModel<MainNavigation, MainUIState, MainIntent>(MainUIState.Content) {
+class MainViewModel : BaseViewModel<MainIntent, MainNavigation, MainUIState, MainDialogState>(
+   initUIState = MainUIState.Content,
+   initDialogState = MainDialogState.None
+) {
 
    override fun performIntent(intent: MainIntent) {
       when (intent) {
@@ -28,13 +31,6 @@ class MainViewModel : BaseViewModel<MainNavigation, MainUIState, MainIntent>(Mai
          _projectList.value = projectList
          updateUIState(MainUIState.Content)
       }
-   }
-
-   private val _dialogState = MutableStateFlow<MainDialogState>(MainDialogState.None)
-   val dialogState = _dialogState.asStateFlow()
-
-   fun updateDialogState(state: MainDialogState) {
-      _dialogState.value = state
    }
 
    private fun addProject(projectName: String, projectPath: String) {

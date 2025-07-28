@@ -1,8 +1,9 @@
 package simple.compose.digfinder.page.main
 
 import database.Project
+import simple.compose.digfinder.base.BaseDialogState
 
-sealed interface MainDialogState {
+sealed interface MainDialogState : BaseDialogState {
 
     data object None : MainDialogState
 

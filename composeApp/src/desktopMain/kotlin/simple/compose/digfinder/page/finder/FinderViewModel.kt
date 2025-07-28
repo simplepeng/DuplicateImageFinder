@@ -8,7 +8,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import simple.compose.digfinder.base.BaseDialogState
 import simple.compose.digfinder.base.BaseViewModel
+import simple.compose.digfinder.base.NoneDialogState
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.data.PathWrapper
 import simple.compose.digfinder.db.DbHelper
@@ -20,7 +22,10 @@ import java.nio.file.Paths
 import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchEvent
 
-class FinderViewModel : BaseViewModel<FinderNavigation, FinderUIState, FinderIntent>(FinderUIState.Default) {
+class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUIState, FinderDialogState>(
+   FinderUIState.Default,
+   FinderDialogState.None,
+) {
 
    override fun performIntent(intent: FinderIntent) {
       when (intent) {
@@ -31,13 +36,6 @@ class FinderViewModel : BaseViewModel<FinderNavigation, FinderUIState, FinderInt
          is FinderIntent.Watching -> {}
          is FinderIntent.CheckDropFile -> checkDropFile(intent.targetDir, intent.dropFile)
       }
-   }
-
-   private val _dialogState = MutableStateFlow<FinderDialogState>(FinderDialogState.None)
-   val dialogState = _dialogState.asStateFlow()
-
-   fun updateDialogState(state: FinderDialogState) {
-      _dialogState.value = state
    }
 
    private val _project = MutableStateFlow<Project?>(null)
