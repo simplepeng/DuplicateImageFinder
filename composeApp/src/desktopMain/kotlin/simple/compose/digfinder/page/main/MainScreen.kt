@@ -26,19 +26,19 @@ import duplicateimagefinder.composeapp.generated.resources.Res
 import duplicateimagefinder.composeapp.generated.resources.ic_delete
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
-import simple.compose.digfinder.page.main.dialog.AddProjectDialog
-import simple.compose.digfinder.page.main.dialog.DeleteProjectDialog
+import simple.compose.digfinder.page.main.component.AddProjectDialog
+import simple.compose.digfinder.page.main.component.DeleteProjectDialog
 import simple.compose.digfinder.widget.AppCard
 import simple.compose.digfinder.widget.LoadingIndicator
 
 @Composable
 fun MainScreen(
-   onAction: (MainAction) -> Unit,
+   onNavigation: (MainNavigation) -> Unit,
    viewModel: MainViewModel = viewModel { MainViewModel() }
 ) {
    LaunchedEffect(viewModel.actionState) {
       viewModel.actionState.collectLatest {
-         onAction(it)
+         onNavigation(it)
       }
    }
    LaunchedEffect(Unit) {
@@ -111,7 +111,7 @@ private fun ScreenContent(
             Item(
                item = project,
                onItemClick = { item ->
-                  viewModel.doAction(MainAction.NavToFinder(item))
+                  viewModel.doAction(MainNavigation.ToFinder(item))
                },
                onDeleteClick = { item ->
                   viewModel.updateDialogState(MainDialogState.DeleteProjectDialog(item))

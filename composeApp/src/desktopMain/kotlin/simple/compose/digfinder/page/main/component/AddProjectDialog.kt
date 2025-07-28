@@ -1,4 +1,4 @@
-package simple.compose.digfinder.page.main.dialog
+package simple.compose.digfinder.page.main.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

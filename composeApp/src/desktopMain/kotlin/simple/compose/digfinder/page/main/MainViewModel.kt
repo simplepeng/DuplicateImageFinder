@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import simple.compose.digfinder.base.BaseViewModel
 import simple.compose.digfinder.db.DbHelper
 
-class MainViewModel : BaseViewModel<MainAction, MainUIState, MainIntent>(MainUIState.Content) {
+class MainViewModel : BaseViewModel<MainNavigation, MainUIState, MainIntent>(MainUIState.Content) {
 
    override fun performIntent(intent: MainIntent) {
       when (intent) {
@@ -41,15 +41,17 @@ class MainViewModel : BaseViewModel<MainAction, MainUIState, MainIntent>(MainUIS
       if (projectName.isEmpty()) return
 
       viewModelScope.launch {
-         DbHelper.addProject(projectName, projectPath)
+         DbHelper.addProject(projectName, projectPath).also {
+            getList()
+         }
       }
-      getList()
    }
 
    private fun deleteProject(id: Long) {
       viewModelScope.launch {
-         DbHelper.deleteProject(id)
-         getList()
+         DbHelper.deleteProject(id).also {
+            getList()
+         }
       }
    }
 }

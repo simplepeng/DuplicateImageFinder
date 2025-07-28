@@ -1,5 +1,3 @@
 package simple.compose.digfinder.base
 
-interface BaseUIState {
-
-}
+interface BaseUIState

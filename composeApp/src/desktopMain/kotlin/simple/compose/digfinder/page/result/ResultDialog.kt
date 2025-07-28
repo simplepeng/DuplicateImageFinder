@@ -39,12 +39,12 @@ fun ResultDialog(
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
-        ResultScreenContent(duplicateFiles)
+        Content(duplicateFiles)
     }
 }
 
 @Composable
-fun ResultScreenContent(
+private fun Content(
     duplicateFiles: List<DuplicateFile>
 ) {
     val totalSize = remember { duplicateFiles.sumOf { it.file2.size } }

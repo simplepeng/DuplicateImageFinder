@@ -21,13 +21,13 @@ object DbHelper {
         name: String,
         path: String
     ) {
-        db.projectQueries.insert(name, path, System.currentTimeMillis())
+        db.projectQueries.insert(name, path, System.currentTimeMillis()).await()
     }
 
     suspend fun deleteProject(
         id: Long
     ) {
-        db.projectQueries.delete(id)
+        db.projectQueries.delete(id).await()
     }
 
     suspend fun getProject(id: Long) = withContext(Dispatchers.IO) {

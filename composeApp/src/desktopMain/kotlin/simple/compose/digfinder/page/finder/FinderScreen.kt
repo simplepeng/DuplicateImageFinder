@@ -40,9 +40,9 @@ import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
 import simple.compose.digfinder.data.PathWrapper
-import simple.compose.digfinder.page.finder.dialog.FileExistsDialog
-import simple.compose.digfinder.page.finder.dialog.NewFileDialog
-import simple.compose.digfinder.page.finder.dialog.NoDuplicateFilesDialog
+import simple.compose.digfinder.page.finder.component.FileExistsDialog
+import simple.compose.digfinder.page.finder.component.NewFileDialog
+import simple.compose.digfinder.page.finder.component.NoDuplicateFilesDialog
 import simple.compose.digfinder.page.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
@@ -55,7 +55,7 @@ import java.net.URI
 fun FinderScreen(
    projectId: Long,
    viewModel: FinderViewModel = viewModel { FinderViewModel() },
-   onAction: (FinderAction) -> Unit,
+   onAction: (FinderNavigation) -> Unit,
 ) {
    LaunchedEffect(Unit) {
       viewModel.actionState.collectLatest {
@@ -137,7 +137,7 @@ fun ScreenContent(
 
    Content(
       onBack = {
-         viewModel.doAction(FinderAction.Back)
+         viewModel.doAction(FinderNavigation.Back)
       },
       title = {
          Text(

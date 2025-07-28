@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<Action : BaseAction, State : BaseUIState, Intent : BaseIntent>(
+abstract class BaseViewModel<Action : BaseNavigation, State : BaseUIState, Intent : BaseIntent>(
     initUIState: State
 ) : ViewModel() {
 

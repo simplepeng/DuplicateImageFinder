@@ -1,4 +1,4 @@
-package simple.compose.digfinder.config
+package simple.compose.digfinder.page
 
 import kotlinx.serialization.Serializable
 
