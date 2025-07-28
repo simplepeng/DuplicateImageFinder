@@ -14,10 +14,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import database.Project
 import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.ic_back
 import duplicateimagefinder.composeapp.generated.resources.ic_clear
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
@@ -46,7 +49,6 @@ import simple.compose.digfinder.page.finder.component.NoDuplicateFilesDialog
 import simple.compose.digfinder.page.result.ResultDialog
 import simple.compose.digfinder.widget.AppButton
 import simple.compose.digfinder.widget.AppCard
-import simple.compose.digfinder.widget.Content
 import simple.compose.digfinder.widget.LoadingIndicator
 import java.io.File
 import java.net.URI
@@ -55,11 +57,11 @@ import java.net.URI
 fun FinderScreen(
    projectId: Long,
    viewModel: FinderViewModel = viewModel { FinderViewModel() },
-   onAction: (FinderNavigation) -> Unit,
+   onNavigation: (FinderNavigation) -> Unit,
 ) {
    LaunchedEffect(Unit) {
-      viewModel.actionState.collectLatest {
-         onAction(it)
+      viewModel.navigationState.collectLatest {
+         onNavigation(it)
       }
    }
    LaunchedEffect(projectId) {
@@ -78,7 +80,7 @@ fun FinderScreen(
          else -> {}
       }
 
-      ScreenContent(project, viewModel)
+      Content(project, viewModel)
    }
 
    val dialogState by viewModel.dialogState.collectAsState()
@@ -126,8 +128,9 @@ fun FinderScreen(
    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenContent(
+fun Content(
    project: Project?,
    viewModel: FinderViewModel
 ) {
@@ -135,62 +138,75 @@ fun ScreenContent(
    var path by remember { mutableStateOf("") }
    val pathList by viewModel.pathList.collectAsState()
 
-   Content(
-      onBack = {
-         viewModel.doAction(FinderNavigation.Back)
-      },
-      title = {
-         Text(
-            text = project?.name.orEmpty()
-         )
-      },
-      showLoading = uiState is FinderUIState.Scanning
+   Box(
+      modifier = Modifier.fillMaxSize(),
+      contentAlignment = Alignment.Center,
    ) {
       Column(
-         modifier = Modifier.fillMaxSize()
-            .padding(vertical = 10.dp, horizontal = 10.dp),
-         verticalArrangement = Arrangement.spacedBy(10.dp)
+         modifier = Modifier.fillMaxSize(),
       ) {
-         OutlinedTextField(
-            value = path,
-            onValueChange = {
-               path = it
-            },
-            label = {
-               Text(
-                  text = "path"
-               )
-            },
-            trailingIcon = {
+         TopAppBar(
+            navigationIcon = {
                Icon(
-                  painter = painterResource(Res.drawable.ic_clear),
+                  painter = painterResource(Res.drawable.ic_back),
                   contentDescription = null,
                   modifier = Modifier.clickable {
-                     path = ""
-                  }.padding(5.dp)
+                     viewModel.performNavigation(FinderNavigation.Back)
+                  }
+               )
+            },
+            title = {
+               Text(
+                  text = project?.name.orEmpty()
                )
             },
             modifier = Modifier.fillMaxWidth()
          )
-         //
-         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(5.dp)
+         Column(
+            modifier = Modifier.fillMaxSize()
+               .padding(vertical = 10.dp, horizontal = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
          ) {
-            AppButton(onClick = {
-               viewModel.performIntent(FinderIntent.AddPath(path))
-            }) {
-               Text(
-                  text = "add"
-               )
-            }
-            AppButton(onClick = {
-               viewModel.performIntent(FinderIntent.Scan(pathList))
-            }) {
-               Text(
-                  text = "scan"
-               )
-            }
+            OutlinedTextField(
+               value = path,
+               onValueChange = {
+                  path = it
+               },
+               label = {
+                  Text(
+                     text = "path"
+                  )
+               },
+               trailingIcon = {
+                  Icon(
+                     painter = painterResource(Res.drawable.ic_clear),
+                     contentDescription = null,
+                     modifier = Modifier.clickable {
+                        path = ""
+                     }.padding(5.dp)
+                  )
+               },
+               modifier = Modifier.fillMaxWidth()
+            )
+            //
+            Row(
+               modifier = Modifier.fillMaxWidth(),
+               horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+               AppButton(onClick = {
+                  viewModel.performIntent(FinderIntent.AddPath(path))
+               }) {
+                  Text(
+                     text = "add"
+                  )
+               }
+               AppButton(onClick = {
+                  viewModel.performIntent(FinderIntent.Scan(pathList))
+               }) {
+                  Text(
+                     text = "scan"
+                  )
+               }
 //                AppButton(onClick = {
 //                    viewModel.performIntent(FinderIntent.Watching(pathList))
 //                }) {
@@ -198,24 +214,25 @@ fun ScreenContent(
 //                        text = "watching"
 //                    )
 //                }
-         }
-         //
-         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.fillMaxWidth().weight(1f)
-         ) {
-            itemsIndexed(
-               items = pathList,
+            }
+            //
+            LazyColumn(
+               verticalArrangement = Arrangement.spacedBy(10.dp),
+               modifier = Modifier.fillMaxWidth().weight(1f)
+            ) {
+               itemsIndexed(
+                  items = pathList,
 //               key = { index, item -> item.projectDirs.id }
-            ) { index, item ->
-               PathItem(
-                  item,
-                  onCheckedChange = {
-                     viewModel.performIntent(FinderIntent.UpdateChecked(index, it))
-                  },
-                  onDropFile = { targetDir, dropFile ->
-                     viewModel.performIntent(FinderIntent.CheckDropFile(targetDir, dropFile))
-                  })
+               ) { index, item ->
+                  PathItem(
+                     item,
+                     onCheckedChange = {
+                        viewModel.performIntent(FinderIntent.UpdateChecked(index, it))
+                     },
+                     onDropFile = { targetDir, dropFile ->
+                        viewModel.performIntent(FinderIntent.CheckDropFile(targetDir, dropFile))
+                     })
+               }
             }
          }
       }

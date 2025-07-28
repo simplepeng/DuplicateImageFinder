@@ -6,7 +6,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import simple.compose.digfinder.page.Router
 import simple.compose.digfinder.page.finder.FinderNavigation
 import simple.compose.digfinder.page.finder.FinderScreen
 import simple.compose.digfinder.page.main.MainNavigation
@@ -36,8 +35,8 @@ fun App() {
             val projectId = backStackEntry.toRoute<Router.Finder>().id
             FinderScreen(
                projectId = projectId,
-               onAction = { action ->
-                  when (action) {
+               onNavigation = { navigation ->
+                  when (navigation) {
                      FinderNavigation.Back -> navController.navigateUp()
                   }
                })

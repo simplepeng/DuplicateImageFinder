@@ -8,26 +8,26 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<Action : BaseNavigation, State : BaseUIState, Intent : BaseIntent>(
-    initUIState: State
+abstract class BaseViewModel<I : BaseIntent, N : BaseNavigation, S : BaseUIState>(
+   initUIState: S
 ) : ViewModel() {
 
-    private val _actionState = MutableSharedFlow<Action>()
-    val actionState = _actionState.asSharedFlow()
+   private val _navigationState = MutableSharedFlow<N>()
+   val navigationState = _navigationState.asSharedFlow()
 
-    fun doAction(action: Action) {
-        viewModelScope.launch {
-            _actionState.emit(action)
-        }
-    }
+   fun performNavigation(navigation: N) {
+      viewModelScope.launch {
+         _navigationState.emit(navigation)
+      }
+   }
 
-    private val _uiState = MutableStateFlow(initUIState)
-    val uiState = _uiState.asStateFlow()
+   private val _uiState = MutableStateFlow(initUIState)
+   val uiState = _uiState.asStateFlow()
 
-    fun updateUIState(state: State) {
-        _uiState.value = state
-    }
+   fun updateUIState(state: S) {
+      _uiState.value = state
+   }
 
-    abstract fun performIntent(intent: Intent)
+   abstract fun performIntent(intent: I)
 
 }

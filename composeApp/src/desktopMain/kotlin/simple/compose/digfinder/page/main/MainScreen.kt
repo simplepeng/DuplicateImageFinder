@@ -36,8 +36,8 @@ fun MainScreen(
    onNavigation: (MainNavigation) -> Unit,
    viewModel: MainViewModel = viewModel { MainViewModel() }
 ) {
-   LaunchedEffect(viewModel.actionState) {
-      viewModel.actionState.collectLatest {
+   LaunchedEffect(viewModel.navigationState) {
+      viewModel.navigationState.collectLatest {
          onNavigation(it)
       }
    }
@@ -111,7 +111,7 @@ private fun ScreenContent(
             Item(
                item = project,
                onItemClick = { item ->
-                  viewModel.doAction(MainNavigation.ToFinder(item))
+                  viewModel.performNavigation(MainNavigation.ToFinder(item))
                },
                onDeleteClick = { item ->
                   viewModel.updateDialogState(MainDialogState.DeleteProjectDialog(item))
