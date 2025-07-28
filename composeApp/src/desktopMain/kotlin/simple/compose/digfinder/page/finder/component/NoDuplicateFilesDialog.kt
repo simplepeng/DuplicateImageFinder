@@ -29,12 +29,12 @@ fun NoDuplicateFilesDialog(
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
-        NoDuplicateFilesDialogContent(onDismissRequest)
+        Content(onDismissRequest)
     }
 }
 
 @Composable
-fun NoDuplicateFilesDialogContent(
+private fun Content(
     onDismissRequest: () -> Unit,
 ) {
     var animation by remember { mutableStateOf("") }

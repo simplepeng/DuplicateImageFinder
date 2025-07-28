@@ -63,7 +63,7 @@ fun MainScreen(
    when (dialogState) {
       MainDialogState.None -> {}
 
-      MainDialogState.AddProjectDialog -> {
+      MainDialogState.AddProject -> {
          AddProjectDialog(
             onDismissRequest = {
                viewModel.updateDialogState(MainDialogState.None)
@@ -74,8 +74,8 @@ fun MainScreen(
          )
       }
 
-      is MainDialogState.DeleteProjectDialog -> {
-         val project = (dialogState as MainDialogState.DeleteProjectDialog).project
+      is MainDialogState.DeleteProject -> {
+         val project = (dialogState as MainDialogState.DeleteProject).project
          DeleteProjectDialog(
             projectName = project.name,
             onDismissRequest = {
@@ -113,7 +113,7 @@ private fun ScreenContent(
                   viewModel.performNavigation(MainNavigation.ToFinder(item))
                },
                onDeleteClick = { item ->
-                  viewModel.updateDialogState(MainDialogState.DeleteProjectDialog(item))
+                  viewModel.updateDialogState(MainDialogState.DeleteProject(item))
                }
             )
          }
@@ -123,7 +123,7 @@ private fun ScreenContent(
          modifier = Modifier.align(Alignment.BottomEnd)
             .padding(bottom = 20.dp, end = 20.dp),
          onClick = {
-            viewModel.updateDialogState(MainDialogState.AddProjectDialog)
+            viewModel.updateDialogState(MainDialogState.AddProject)
          },
       ) {
          Text(

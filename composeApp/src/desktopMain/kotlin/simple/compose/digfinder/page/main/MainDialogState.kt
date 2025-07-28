@@ -7,7 +7,7 @@ sealed interface MainDialogState : BaseDialogState {
 
     data object None : MainDialogState
 
-    data object AddProjectDialog : MainDialogState
+    data object AddProject : MainDialogState
 
-    data class DeleteProjectDialog(val project: Project) : MainDialogState
+    data class DeleteProject(val project: Project) : MainDialogState
 }

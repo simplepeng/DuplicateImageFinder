@@ -12,7 +12,7 @@ sealed interface FinderDialogState : BaseDialogState {
 
    data object Empty : FinderDialogState
 
-   data class ShowNewFileDialog(val targetDirFile: File, val dropFile: File) : FinderDialogState
+   data class NewFile(val targetDirFile: File, val dropFile: File) : FinderDialogState
 
-   data class ShowFileExistsDialog(val file: DuplicateFile.File) : FinderDialogState
+   data class FileExists(val file: DuplicateFile.File) : FinderDialogState
 }

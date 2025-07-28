@@ -39,12 +39,12 @@ fun WatchingDialog(
             dismissOnClickOutside = false
         )
     ) {
-        DialogContent(onDismissRequest)
+        Content(onDismissRequest)
     }
 }
 
 @Composable
-private fun DialogContent(onDismissRequest: () -> Unit) {
+private fun Content(onDismissRequest: () -> Unit) {
     var animation by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {

@@ -30,12 +30,12 @@ fun FileExistsDialog(
             dismissOnClickOutside = false,
         )
     ) {
-        DialogContent(file, onDismissRequest)
+        Content(file, onDismissRequest)
     }
 }
 
 @Composable
-private fun DialogContent(
+private fun Content(
     file: DuplicateFile.File,
     onDismissRequest: () -> Unit,
 ) {

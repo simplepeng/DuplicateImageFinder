@@ -102,8 +102,8 @@ fun FinderScreen(
          )
       }
 
-      is FinderDialogState.ShowNewFileDialog -> {
-         val state = (dialogState as FinderDialogState.ShowNewFileDialog)
+      is FinderDialogState.NewFile -> {
+         val state = (dialogState as FinderDialogState.NewFile)
          NewFileDialog(
             state.dropFile,
             onDismissRequest = {
@@ -116,9 +116,9 @@ fun FinderScreen(
          )
       }
 
-      is FinderDialogState.ShowFileExistsDialog -> {
+      is FinderDialogState.FileExists -> {
          FileExistsDialog(
-            (dialogState as FinderDialogState.ShowFileExistsDialog).file,
+            (dialogState as FinderDialogState.FileExists).file,
             onDismissRequest = {
                viewModel.updateDialogState(FinderDialogState.None)
             })
@@ -130,7 +130,7 @@ fun FinderScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Content(
+private fun Content(
    project: Project?,
    viewModel: FinderViewModel
 ) {

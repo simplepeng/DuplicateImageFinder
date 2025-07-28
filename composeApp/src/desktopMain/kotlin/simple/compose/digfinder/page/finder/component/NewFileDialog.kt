@@ -37,12 +37,12 @@ fun NewFileDialog(
             dismissOnClickOutside = false,
         )
     ) {
-        DialogContent(dropFile, onDismissRequest, onSure)
+        Content(dropFile, onDismissRequest, onSure)
     }
 }
 
 @Composable
-private fun DialogContent(
+private fun Content(
     dropFile: File,
     onDismissRequest: () -> Unit,
     onSure: (newFileName: String) -> Unit = {}

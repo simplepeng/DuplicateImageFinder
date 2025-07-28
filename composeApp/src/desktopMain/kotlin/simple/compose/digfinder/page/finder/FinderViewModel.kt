@@ -8,9 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import simple.compose.digfinder.base.BaseDialogState
 import simple.compose.digfinder.base.BaseViewModel
-import simple.compose.digfinder.base.NoneDialogState
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.data.PathWrapper
 import simple.compose.digfinder.db.DbHelper
@@ -222,10 +220,10 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
          val hashStr = dropFile.hashStr()
          if (hashStrMap.contains(hashStr)) {
             hashStrMap.get(hashStr)?.let {
-               updateDialogState(FinderDialogState.ShowFileExistsDialog(it))
+               updateDialogState(FinderDialogState.FileExists(it))
             }
          } else {
-            updateDialogState(FinderDialogState.ShowNewFileDialog(targetDirFile, dropFile))
+            updateDialogState(FinderDialogState.NewFile(targetDirFile, dropFile))
          }
       }
    }
