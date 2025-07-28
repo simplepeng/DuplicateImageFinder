@@ -38,6 +38,7 @@ class MainViewModel : BaseViewModel<MainIntent, MainNavigation, MainUIState, Mai
 
       viewModelScope.launch {
          DbHelper.addProject(projectName, projectPath).also {
+            updateDialogState(MainDialogState.None)
             getList()
          }
       }

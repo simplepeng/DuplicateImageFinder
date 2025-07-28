@@ -31,12 +31,12 @@ fun AddProjectDialog(
     properties = DialogProperties(),
     onDismissRequest = onDismissRequest,
   ) {
-    DialogContent(onDismissRequest, onConfirm)
+    Content(onDismissRequest, onConfirm)
   }
 }
 
 @Composable
-private fun DialogContent(
+private fun Content(
   onDismissRequest: () -> Unit,
   onConfirm: (projectName: String, projectPath: String) -> Unit,
 ) {

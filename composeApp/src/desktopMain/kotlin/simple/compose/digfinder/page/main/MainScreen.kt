@@ -55,8 +55,8 @@ fun MainScreen(
       ScreenContent(viewModel)
 
       when (uiState) {
-         MainUIState.Content -> {}
          MainUIState.Loading -> LoadingIndicator()
+         MainUIState.Content -> {}
       }
    }
 
@@ -69,7 +69,6 @@ fun MainScreen(
                viewModel.updateDialogState(MainDialogState.None)
             },
             onConfirm = { projectName, projectPath ->
-               viewModel.updateDialogState(MainDialogState.None)
                viewModel.performIntent(MainIntent.AddProject(projectName, projectPath))
             }
          )
