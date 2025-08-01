@@ -4,6 +4,12 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.cancel
+import duplicateimagefinder.composeapp.generated.resources.confirm
+import duplicateimagefinder.composeapp.generated.resources.delete_project_desc
+import duplicateimagefinder.composeapp.generated.resources.delete_project_title
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DeleteProjectDialog(
@@ -14,23 +20,23 @@ fun DeleteProjectDialog(
    AlertDialog(
       onDismissRequest = onDismissRequest,
       title = {
-         Text("Oops! Delete $projectName?")
+         Text(text = stringResource(Res.string.delete_project_title, projectName))
       },
       text = {
-         Text("Are you sure you want to delete this project?")
+         Text(text = stringResource(Res.string.delete_project_desc))
       },
       dismissButton = {
          TextButton(onClick = {
             onDismissRequest.invoke()
          }) {
-            Text("Cancel")
+            Text(stringResource(Res.string.cancel))
          }
       },
       confirmButton = {
          TextButton(onClick = {
             onConfirm.invoke()
          }) {
-            Text("Confirm")
+            Text(stringResource(Res.string.confirm))
          }
       }
    )

@@ -19,6 +19,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import duplicateimagefinder.composeapp.generated.resources.Res
 import duplicateimagefinder.composeapp.generated.resources.add_project
+import duplicateimagefinder.composeapp.generated.resources.cancel
+import duplicateimagefinder.composeapp.generated.resources.confirm
 import duplicateimagefinder.composeapp.generated.resources.project_name
 import duplicateimagefinder.composeapp.generated.resources.project_path
 import org.jetbrains.compose.resources.stringResource
@@ -90,14 +92,14 @@ private fun Content(
                onDismissRequest.invoke()
             }) {
                Text(
-                  text = "Cancel"
+                  text = stringResource(Res.string.cancel)
                )
             }
             AppButton(onClick = {
                onConfirm.invoke(projectName, projectPath)
             }) {
                Text(
-                  text = "Confirm"
+                  text = stringResource(Res.string.confirm)
                )
             }
          }

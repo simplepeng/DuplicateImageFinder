@@ -4,4 +4,9 @@
     <string name="add_project">Add Project</string>
     <string name="project_name">Project Name</string>
     <string name="project_path">Project Path - Option</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="analysis">Analysis</string>
+    <string name="delete_project_title">Oops! Delete %1$s?</string>
+    <string name="delete_project_desc">Are you sure you want to delete this project?</string>
 </resources>
