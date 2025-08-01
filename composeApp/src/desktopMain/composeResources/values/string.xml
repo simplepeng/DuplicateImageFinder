@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="add">Add</string>
+    <string name="add_project">Add Project</string>
+    <string name="project_name">Project Name</string>
+    <string name="project_path">Project Path - Option</string>
+</resources>

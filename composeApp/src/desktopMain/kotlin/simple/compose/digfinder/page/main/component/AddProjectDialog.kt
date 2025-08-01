@@ -17,6 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.add_project
+import duplicateimagefinder.composeapp.generated.resources.project_name
+import duplicateimagefinder.composeapp.generated.resources.project_path
+import org.jetbrains.compose.resources.stringResource
 import simple.compose.digfinder.config.Dimen
 import simple.compose.digfinder.theme.AppTheme
 import simple.compose.digfinder.widget.AppButton
@@ -24,78 +29,78 @@ import simple.compose.digfinder.widget.DialogCard
 
 @Composable
 fun AddProjectDialog(
-  onDismissRequest: () -> Unit,
-  onConfirm: (projectName: String, projectPath: String) -> Unit,
+   onDismissRequest: () -> Unit,
+   onConfirm: (projectName: String, projectPath: String) -> Unit,
 ) {
-  Dialog(
-    properties = DialogProperties(),
-    onDismissRequest = onDismissRequest,
-  ) {
-    Content(onDismissRequest, onConfirm)
-  }
+   Dialog(
+      properties = DialogProperties(),
+      onDismissRequest = onDismissRequest,
+   ) {
+      Content(onDismissRequest, onConfirm)
+   }
 }
 
 @Composable
 private fun Content(
-  onDismissRequest: () -> Unit,
-  onConfirm: (projectName: String, projectPath: String) -> Unit,
+   onDismissRequest: () -> Unit,
+   onConfirm: (projectName: String, projectPath: String) -> Unit,
 ) {
-  var projectName by remember { mutableStateOf("") }
-  var projectPath by remember { mutableStateOf("") }
+   var projectName by remember { mutableStateOf("") }
+   var projectPath by remember { mutableStateOf("") }
 
-  DialogCard {
-    Column(
-      modifier = Modifier.fillMaxWidth().padding(Dimen.dialogPadding),
-      verticalArrangement = Arrangement.spacedBy(10.dp),
-      horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-      Text(
-        text = "Add Project",
-        style = AppTheme.dialogTitle,
-      )
-      OutlinedTextField(
-        projectName,
-        onValueChange = {
-          projectName = it
-        },
-        modifier = Modifier.fillMaxWidth(),
-        maxLines = 1,
-        label = {
-          Text(
-            text = "Project Name",
-          )
-        }
-      )
-      OutlinedTextField(
-        projectPath,
-        onValueChange = {
-          projectPath = it
-        },
-        modifier = Modifier.fillMaxWidth(),
-        label = {
-          Text(text = "Project Path - Option")
-        },
-      )
-      Row(
-        modifier = Modifier.align(Alignment.End),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+   DialogCard {
+      Column(
+         modifier = Modifier.fillMaxWidth().padding(Dimen.dialogPadding),
+         verticalArrangement = Arrangement.spacedBy(10.dp),
+         horizontalAlignment = Alignment.CenterHorizontally,
       ) {
-        AppButton(onClick = {
-          onDismissRequest.invoke()
-        }) {
-          Text(
-            text = "Cancel"
-          )
-        }
-        AppButton(onClick = {
-          onConfirm.invoke(projectName, projectPath)
-        }) {
-          Text(
-            text = "Confirm"
-          )
-        }
+         Text(
+            text = stringResource(Res.string.add_project),
+            style = AppTheme.dialogTitle,
+         )
+         OutlinedTextField(
+            projectName,
+            onValueChange = {
+               projectName = it
+            },
+            modifier = Modifier.fillMaxWidth(),
+            maxLines = 1,
+            label = {
+               Text(
+                  text = stringResource(Res.string.project_name),
+               )
+            }
+         )
+         OutlinedTextField(
+            projectPath,
+            onValueChange = {
+               projectPath = it
+            },
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+               Text(text = stringResource(Res.string.project_path))
+            },
+         )
+         Row(
+            modifier = Modifier.align(Alignment.End),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+         ) {
+            AppButton(onClick = {
+               onDismissRequest.invoke()
+            }) {
+               Text(
+                  text = "Cancel"
+               )
+            }
+            AppButton(onClick = {
+               onConfirm.invoke(projectName, projectPath)
+            }) {
+               Text(
+                  text = "Confirm"
+               )
+            }
+         }
       }
-    }
-  }
+   }
 }

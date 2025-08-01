@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="add">添加</string>
+    <string name="add_project">添加项目</string>
+    <string name="project_name">项目名称</string>
+    <string name="project_path">项目路径 - 可选</string>
+</resources>

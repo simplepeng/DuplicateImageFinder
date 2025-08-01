@@ -23,9 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import database.Project
 import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.add
 import duplicateimagefinder.composeapp.generated.resources.ic_delete
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import simple.compose.digfinder.page.main.component.AddProjectDialog
 import simple.compose.digfinder.page.main.component.DeleteProjectDialog
 import simple.compose.digfinder.widget.AppCard
@@ -127,7 +129,7 @@ private fun ScreenContent(
          },
       ) {
          Text(
-            text = "Add"
+            text = stringResource(Res.string.add)
          )
       }
    }
