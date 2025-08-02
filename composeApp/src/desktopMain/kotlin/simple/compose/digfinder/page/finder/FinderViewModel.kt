@@ -27,6 +27,7 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
 
    override fun performIntent(intent: FinderIntent) {
       when (intent) {
+         is FinderIntent.UpdatePath -> updatePath(intent.path)
          is FinderIntent.GetProject -> getProject(intent.id)
          is FinderIntent.AddPath -> addPath(intent.path)
          is FinderIntent.Scan -> scan(intent.pathList)
@@ -48,6 +49,13 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
          updateUIState(FinderUIState.Content)
          getPathList(id)
       }
+   }
+
+   private val _path = MutableStateFlow("")
+   val path = _path.asStateFlow()
+
+   private fun updatePath(path: String){
+      _path.value = path
    }
 
    private val _pathList = MutableStateFlow<List<PathWrapper>>(emptyList())
@@ -77,6 +85,7 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
       viewModelScope.launch {
          DatabaseHelper.addDirPath(projectId, path).also {
 //                _pathList.value += PathWrapper(it)
+            updatePath("")
             getPathList(projectId)
          }
       }

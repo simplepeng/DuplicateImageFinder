@@ -163,8 +163,7 @@ private fun Content(
    project: Project?,
    viewModel: FinderViewModel
 ) {
-   val uiState by viewModel.uiState.collectAsState()
-   var path by remember { mutableStateOf("") }
+   val path by viewModel.path.collectAsState()
    val pathList by viewModel.pathList.collectAsState()
    val canShowAnalysis by derivedStateOf { pathList.isNotEmpty() }
 
@@ -200,7 +199,7 @@ private fun Content(
             OutlinedTextField(
                value = path,
                onValueChange = {
-                  path = it
+                  viewModel.performIntent(FinderIntent.UpdatePath(it))
                },
                label = {
                   Text(
@@ -213,7 +212,7 @@ private fun Content(
                         painter = painterResource(Res.drawable.ic_clear),
                         contentDescription = null,
                         modifier = Modifier.clickable {
-                           path = ""
+                           viewModel.performIntent(FinderIntent.UpdatePath(""))
                         }.padding(5.dp)
                      )
                   }
