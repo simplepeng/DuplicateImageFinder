@@ -1,4 +1,4 @@
-package simple.compose.digfinder.db
+package simple.compose.digfinder.database
 
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Properties
 
-object DbHelper {
+object DatabaseHelper {
 
     val driver: SqlDriver by lazy { JdbcSqliteDriver("jdbc:sqlite:dig_finder.db", Properties(), AppDatabase.Schema) }
 

@@ -9,7 +9,9 @@ CREATE TABLE ProjectDirs (
 getList:
 SELECT *
 FROM ProjectDirs
-WHERE projectId = ?;
+WHERE projectId = ?
+ORDER BY time DESC
+;
 
 get:
 SELECT *

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import simple.compose.digfinder.base.BaseViewModel
-import simple.compose.digfinder.db.DbHelper
+import simple.compose.digfinder.database.DatabaseHelper
 
 class MainViewModel : BaseViewModel<MainIntent, MainNavigation, MainUIState, MainDialogState>(
    initUIState = MainUIState.Content,
@@ -27,7 +27,7 @@ class MainViewModel : BaseViewModel<MainIntent, MainNavigation, MainUIState, Mai
    private fun getList() {
       updateUIState(MainUIState.Loading)
       viewModelScope.launch {
-         val projectList = DbHelper.getProjectList()
+         val projectList = DatabaseHelper.getProjectList()
          _projectList.value = projectList
          updateUIState(MainUIState.Content)
       }
@@ -37,7 +37,7 @@ class MainViewModel : BaseViewModel<MainIntent, MainNavigation, MainUIState, Mai
       if (projectName.isEmpty()) return
 
       viewModelScope.launch {
-         DbHelper.addProject(projectName, projectPath).also {
+         DatabaseHelper.addProject(projectName, projectPath).also {
             updateDialogState(MainDialogState.None)
             getList()
          }
@@ -46,7 +46,7 @@ class MainViewModel : BaseViewModel<MainIntent, MainNavigation, MainUIState, Mai
 
    private fun deleteProject(id: Long) {
       viewModelScope.launch {
-         DbHelper.deleteProject(id).also {
+         DatabaseHelper.deleteProject(id).also {
             getList()
          }
       }

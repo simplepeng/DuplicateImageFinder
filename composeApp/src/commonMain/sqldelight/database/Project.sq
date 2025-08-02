@@ -7,7 +7,9 @@ CREATE TABLE Project (
 
 selectAll:
 SELECT *
-FROM Project;
+FROM Project
+ORDER BY time DESC
+;
 
 insert:
 INSERT INTO Project(name,path,time)

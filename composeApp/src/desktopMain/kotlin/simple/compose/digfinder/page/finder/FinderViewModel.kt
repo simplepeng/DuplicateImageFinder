@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 import simple.compose.digfinder.base.BaseViewModel
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.data.PathWrapper
-import simple.compose.digfinder.db.DbHelper
+import simple.compose.digfinder.database.DatabaseHelper
 import simple.compose.digfinder.ext.hashStr
 import java.io.File
 import java.nio.file.FileSystems
@@ -42,7 +42,7 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
    private fun getProject(id: Long) {
       updateUIState(FinderUIState.Loading)
       viewModelScope.launch {
-         DbHelper.getProject(id).also {
+         DatabaseHelper.getProject(id).also {
             _project.value = it
          }
          updateUIState(FinderUIState.Content)
@@ -54,7 +54,7 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
    val pathList = _pathList.asStateFlow()
 
    private suspend fun getPathList(id: Long) {
-      val dirPathList = DbHelper.getDirPathList(id)
+      val dirPathList = DatabaseHelper.getDirPathList(id)
       _pathList.value = dirPathList.map { PathWrapper(it) }
    }
 
@@ -70,7 +70,7 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
       }
       val projectId = _project.value!!.id
       viewModelScope.launch {
-         DbHelper.addDirPath(projectId, path).also {
+         DatabaseHelper.addDirPath(projectId, path).also {
 //                _pathList.value += PathWrapper(it)
             getPathList(projectId)
          }
