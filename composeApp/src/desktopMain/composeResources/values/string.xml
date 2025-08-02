@@ -13,4 +13,6 @@
     <string name="congratulations">Amazing! There are zero duplicate resource files.</string>
     <string name="file_is_exists">Oops! File is Exists</string>
     <string name="copy_name">Copy Name</string>
+    <string name="file_name">File Name</string>
+    <string name="move_file_to_target_dir">Move File To Target Dir</string>
 </resources>

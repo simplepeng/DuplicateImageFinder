@@ -19,6 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
+import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.cancel
+import duplicateimagefinder.composeapp.generated.resources.confirm
+import duplicateimagefinder.composeapp.generated.resources.file_name
+import duplicateimagefinder.composeapp.generated.resources.move_file_to_target_dir
+import org.jetbrains.compose.resources.stringResource
 import simple.compose.digfinder.config.Dimen
 import simple.compose.digfinder.theme.AppTheme
 import simple.compose.digfinder.widget.AppButton
@@ -27,74 +33,80 @@ import java.io.File
 
 @Composable
 fun NewFileDialog(
-    dropFile: File,
-    onDismissRequest: () -> Unit,
-    onSure: (newFileName: String) -> Unit = {}
+   dropFile: File,
+   onDismissRequest: () -> Unit,
+   onSure: (newFileName: String) -> Unit = {}
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = DialogProperties(
-            dismissOnClickOutside = false,
-        )
-    ) {
-        Content(dropFile, onDismissRequest, onSure)
-    }
+   Dialog(
+      onDismissRequest = onDismissRequest,
+      properties = DialogProperties(
+         dismissOnClickOutside = false,
+      )
+   ) {
+      Content(dropFile, onDismissRequest, onSure)
+   }
 }
 
 @Composable
 private fun Content(
-    dropFile: File,
-    onDismissRequest: () -> Unit,
-    onSure: (newFileName: String) -> Unit = {}
+   dropFile: File,
+   onDismissRequest: () -> Unit,
+   onSure: (newFileName: String) -> Unit = {}
 ) {
-    var newFileNameState by remember { mutableStateOf(dropFile.nameWithoutExtension) }
+   var newFileNameState by remember { mutableStateOf(dropFile.nameWithoutExtension) }
 
-    DialogCard {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+   DialogCard {
+      Column(
+         verticalArrangement = Arrangement.spacedBy(10.dp),
 //            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().padding(Dimen.dialogPadding)
-        ) {
-            Text(
-                text = "Move File To Target Dir",
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = AppTheme.dialogTitle
-            )
-            AsyncImage(
-                model = dropFile,
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
-                    .weight(1f)
-                    .align(Alignment.CenterHorizontally),
-                contentScale = ContentScale.Fit,
-            )
-            OutlinedTextField(
-                newFileNameState,
-                onValueChange = {
-                    newFileNameState = it
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = {
-                    Text(text = "File Name")
-                },
-                textStyle = AppTheme.textFiled
-            )
-            Row(
-                modifier = Modifier.align(Alignment.End),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                AppButton(onClick = {
-                    onDismissRequest.invoke()
-                }) {
-                    Text(text = "Cancel")
-                }
-                AppButton(onClick = {
-                    onSure.invoke("$newFileNameState.${dropFile.extension}")
-                }) {
-                    Text(text = "Confirm")
-                }
+         modifier = Modifier.fillMaxWidth().padding(Dimen.dialogPadding)
+      ) {
+         Text(
+            text = stringResource(Res.string.move_file_to_target_dir),
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = AppTheme.dialogTitle
+         )
+         AsyncImage(
+            model = dropFile,
+            contentDescription = null,
+            modifier = Modifier.fillMaxWidth()
+               .weight(1f)
+               .align(Alignment.CenterHorizontally),
+            contentScale = ContentScale.Fit,
+         )
+         OutlinedTextField(
+            newFileNameState,
+            onValueChange = {
+               newFileNameState = it
+            },
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+               Text(
+                  text = stringResource(Res.string.file_name)
+               )
+            },
+            textStyle = AppTheme.textFiled
+         )
+         Row(
+            modifier = Modifier.align(Alignment.End),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+         ) {
+            AppButton(onClick = {
+               onDismissRequest.invoke()
+            }) {
+               Text(
+                  text = stringResource(Res.string.cancel)
+               )
             }
-        }
-    }
+            AppButton(onClick = {
+               onSure.invoke("$newFileNameState.${dropFile.extension}")
+            }) {
+               Text(
+                  text = stringResource(Res.string.confirm)
+               )
+            }
+         }
+      }
+   }
 }

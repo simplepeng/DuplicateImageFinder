@@ -63,7 +63,9 @@ private fun Content(
          )
          AppButton(
             onClick = {
-               clipboardManager.setText(AnnotatedString(file.name.substringBefore(".")))
+               clipboardManager.setText(
+                  AnnotatedString(file.name.substringBefore("."))
+               )
                onDismissRequest.invoke()
             }
          ) {

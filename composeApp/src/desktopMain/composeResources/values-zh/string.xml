@@ -13,4 +13,6 @@
     <string name="congratulations">恭喜你！竟然一个重复的资源文件都没有！</string>
     <string name="file_is_exists">已经有这个文件了哦</string>
     <string name="copy_name">拷贝名称</string>
+    <string name="file_name">文件名称</string>
+    <string name="move_file_to_target_dir">移动文件到目标目录</string>
 </resources>
