@@ -184,13 +184,15 @@ private fun Content(
                   )
                },
                trailingIcon = {
-                  Icon(
-                     painter = painterResource(Res.drawable.ic_clear),
-                     contentDescription = null,
-                     modifier = Modifier.clickable {
-                        path = ""
-                     }.padding(5.dp)
-                  )
+                  if (path.isNotEmpty()) {
+                     Icon(
+                        painter = painterResource(Res.drawable.ic_clear),
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                           path = ""
+                        }.padding(5.dp)
+                     )
+                  }
                },
                modifier = Modifier.fillMaxWidth()
             )
