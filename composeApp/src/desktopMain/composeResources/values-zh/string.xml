@@ -11,4 +11,6 @@
     <string name="delete_project_desc">你确定要删除这个项目吗?</string>
     <string name="resource_path">资源路径</string>
     <string name="congratulations">恭喜你！竟然一个重复的资源文件都没有！</string>
+    <string name="file_is_exists">已经有这个文件了哦</string>
+    <string name="copy_name">拷贝名称</string>
 </resources>
