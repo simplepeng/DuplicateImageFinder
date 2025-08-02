@@ -68,6 +68,11 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
       if (_pathList.value.map { it.projectDirs.dirPath }.contains(path)) {
          return
       }
+      if (!File(path).exists()) {
+         updateDialogState(FinderDialogState.ResourceDirNotExists)
+         return
+      }
+
       val projectId = _project.value!!.id
       viewModelScope.launch {
          DatabaseHelper.addDirPath(projectId, path).also {

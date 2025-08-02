@@ -17,4 +17,5 @@
     <string name="move_file_to_target_dir">移动文件到目标目录</string>
     <string name="optimized_result_text">本次优化完成预计可缩小包体积约%1$s</string>
     <string name ="name_copied">%1$s 名称已复制</string>
+    <string name="dir_not_exits">资源目录不存在</string>
 </resources>

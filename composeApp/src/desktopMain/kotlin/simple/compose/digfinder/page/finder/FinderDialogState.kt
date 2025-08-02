@@ -15,4 +15,6 @@ sealed interface FinderDialogState : BaseDialogState {
    data class NewFile(val targetDirFile: File, val dropFile: File) : FinderDialogState
 
    data class FileExists(val file: DuplicateFile.File) : FinderDialogState
+
+   data object ResourceDirNotExists : FinderDialogState
 }
