@@ -9,4 +9,6 @@
     <string name="analysis">分析</string>
     <string name="delete_project_title">注意! 删除 %1$s?</string>
     <string name="delete_project_desc">你确定要删除这个项目吗?</string>
+    <string name="resource_path">资源路径</string>
+    <string name="congratulations">恭喜你！竟然一个重复的资源文件都没有！</string>
 </resources>

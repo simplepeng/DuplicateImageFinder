@@ -23,6 +23,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,10 +39,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import database.Project
 import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.add
+import duplicateimagefinder.composeapp.generated.resources.analysis
 import duplicateimagefinder.composeapp.generated.resources.ic_back
 import duplicateimagefinder.composeapp.generated.resources.ic_clear
+import duplicateimagefinder.composeapp.generated.resources.resource_path
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import simple.compose.digfinder.data.PathWrapper
 import simple.compose.digfinder.page.finder.component.FileExistsDialog
 import simple.compose.digfinder.page.finder.component.NewFileDialog
@@ -137,6 +142,7 @@ private fun Content(
    val uiState by viewModel.uiState.collectAsState()
    var path by remember { mutableStateOf("") }
    val pathList by viewModel.pathList.collectAsState()
+   val canShowAnalysis by derivedStateOf { pathList.isNotEmpty() }
 
    Box(
       modifier = Modifier.fillMaxSize(),
@@ -174,7 +180,7 @@ private fun Content(
                },
                label = {
                   Text(
-                     text = "path"
+                     text = stringResource(Res.string.resource_path)
                   )
                },
                trailingIcon = {
@@ -197,15 +203,17 @@ private fun Content(
                   viewModel.performIntent(FinderIntent.AddPath(path))
                }) {
                   Text(
-                     text = "add"
+                     text = stringResource(Res.string.add)
                   )
                }
-               AppButton(onClick = {
-                  viewModel.performIntent(FinderIntent.Scan(pathList))
-               }) {
-                  Text(
-                     text = "scan"
-                  )
+               if (canShowAnalysis) {
+                  AppButton(onClick = {
+                     viewModel.performIntent(FinderIntent.Scan(pathList))
+                  }) {
+                     Text(
+                        text = stringResource(Res.string.analysis)
+                     )
+                  }
                }
 //                AppButton(onClick = {
 //                    viewModel.performIntent(FinderIntent.Watching(pathList))

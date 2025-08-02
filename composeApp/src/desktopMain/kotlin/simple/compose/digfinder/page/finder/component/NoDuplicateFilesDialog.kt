@@ -17,10 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.congratulations
 import kotlinx.coroutines.delay
 import kottieComposition.KottieCompositionSpec
 import kottieComposition.animateKottieCompositionAsState
 import kottieComposition.rememberKottieComposition
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NoDuplicateFilesDialog(
@@ -69,7 +71,7 @@ private fun Content(
             modifier = Modifier.size(300.dp)
         )
         Text(
-            text = "恭喜你！竟然一个重复的资源文件都没有！",
+            text = stringResource(Res.string.congratulations),
             color = Color.White
         )
     }
