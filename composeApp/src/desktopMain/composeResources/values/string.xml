@@ -15,4 +15,5 @@
     <string name="copy_name">Copy Name</string>
     <string name="file_name">File Name</string>
     <string name="move_file_to_target_dir">Move File To Target Dir</string>
+    <string name="optimized_result_text">After this optimization, the package size is expected to be reduced by approximately%1$s</string>
 </resources>

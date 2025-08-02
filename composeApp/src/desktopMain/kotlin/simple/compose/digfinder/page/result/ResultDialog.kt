@@ -26,113 +26,116 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
+import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.optimized_result_text
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.ext.formatStr
 import simple.compose.digfinder.widget.AppCard
 
 @Composable
 fun ResultDialog(
-    onDismissRequest: () -> Unit,
-    duplicateFiles: List<DuplicateFile>
+   onDismissRequest: () -> Unit,
+   duplicateFiles: List<DuplicateFile>
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest
-    ) {
-        Content(duplicateFiles)
-    }
+   Dialog(
+      onDismissRequest = onDismissRequest
+   ) {
+      Content(duplicateFiles)
+   }
 }
 
 @Composable
 private fun Content(
-    duplicateFiles: List<DuplicateFile>
+   duplicateFiles: List<DuplicateFile>
 ) {
-    val totalSize = remember { duplicateFiles.sumOf { it.file2.size } }
-    val coroutineScope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState() }
+   val totalSize = remember { duplicateFiles.sumOf { it.file2.size } }
+   val coroutineScope = rememberCoroutineScope()
+   val snackBarHostState = remember { SnackbarHostState() }
 //    val clipboard = LocalClipboard.current
-    val clipboardManager = LocalClipboardManager.current
+   val clipboardManager = LocalClipboardManager.current
 
-    Card(
-        modifier = Modifier.padding(vertical = 10.dp),
-        shape = RoundedCornerShape(10.dp)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.fillMaxWidth()
-                    .padding(10.dp),
-            ) {
-                Text(
-                    text = "本次优化完成预计可缩小包体积约 ${totalSize.formatStr}"
-                )
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(5.dp),
-                    modifier = Modifier.fillMaxSize()
-
-                ) {
-                    items(duplicateFiles) { item ->
-                        RowItem(item, onItemClick = { file ->
-                            coroutineScope.launch {
-                                clipboardManager.setText(AnnotatedString(file.name))
-//                                clipboard.setClipEntry(ClipEntry(file.name))
-                                snackBarHostState.showSnackbar("${file.name} copied")
-                            }
-                        })
-                    }
-                }
-            }
-            SnackbarHost(
-                hostState = snackBarHostState,
-                modifier = Modifier.align(Alignment.BottomCenter)
+   Card(
+      modifier = Modifier.padding(vertical = 10.dp),
+      shape = RoundedCornerShape(10.dp)
+   ) {
+      Box(
+         modifier = Modifier.fillMaxSize()
+      ) {
+         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxWidth()
+               .padding(10.dp),
+         ) {
+            Text(
+               text = stringResource(Res.string.optimized_result_text, totalSize.formatStr)
             )
-        }
-    }
+            LazyColumn(
+               verticalArrangement = Arrangement.spacedBy(5.dp),
+               modifier = Modifier.fillMaxSize()
+
+            ) {
+               items(duplicateFiles) { item ->
+                  RowItem(item, onItemClick = { file ->
+                     coroutineScope.launch {
+                        clipboardManager.setText(AnnotatedString(file.name))
+//                                clipboard.setClipEntry(ClipEntry(file.name))
+                        snackBarHostState.showSnackbar("${file.name} copied")
+                     }
+                  })
+               }
+            }
+         }
+         SnackbarHost(
+            hostState = snackBarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+         )
+      }
+   }
 }
 
 @Composable
 private fun RowItem(
-    item: DuplicateFile,
-    onItemClick: (DuplicateFile.File) -> Unit = {}
+   item: DuplicateFile,
+   onItemClick: (DuplicateFile.File) -> Unit = {}
 ) {
-    AppCard {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-        ) {
-            Item(item.file1, onItemClick)
-            Item(item.file2, onItemClick)
-        }
-    }
+   AppCard {
+      Row(
+         modifier = Modifier.fillMaxWidth(),
+         horizontalArrangement = Arrangement.spacedBy(5.dp),
+      ) {
+         Item(item.file1, onItemClick)
+         Item(item.file2, onItemClick)
+      }
+   }
 }
 
 @Composable
 private fun RowScope.Item(
-    file: DuplicateFile.File,
-    onItemClick: (DuplicateFile.File) -> Unit = {}
+   file: DuplicateFile.File,
+   onItemClick: (DuplicateFile.File) -> Unit = {}
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.weight(1f)
-            .clickable {
-                onItemClick.invoke(file)
-            }.padding(vertical = 5.dp, horizontal = 10.dp)
-    ) {
-        AsyncImage(
-            model = file.path,
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            text = file.name
-        )
-        Text(
-            text = file.size.formatStr
-        )
-    }
+   Column(
+      verticalArrangement = Arrangement.spacedBy(10.dp),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier.weight(1f)
+         .clickable {
+            onItemClick.invoke(file)
+         }.padding(vertical = 5.dp, horizontal = 10.dp)
+   ) {
+      AsyncImage(
+         model = file.path,
+         contentDescription = null,
+         modifier = Modifier.fillMaxWidth()
+      )
+      Text(
+         text = file.name
+      )
+      Text(
+         text = file.size.formatStr
+      )
+   }
 
 }
