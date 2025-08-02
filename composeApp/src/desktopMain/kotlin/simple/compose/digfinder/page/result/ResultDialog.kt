@@ -27,8 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
 import duplicateimagefinder.composeapp.generated.resources.Res
+import duplicateimagefinder.composeapp.generated.resources.name_copied
 import duplicateimagefinder.composeapp.generated.resources.optimized_result_text
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import simple.compose.digfinder.data.DuplicateFile
 import simple.compose.digfinder.ext.formatStr
@@ -80,9 +82,10 @@ private fun Content(
                items(duplicateFiles) { item ->
                   RowItem(item, onItemClick = { file ->
                      coroutineScope.launch {
-                        clipboardManager.setText(AnnotatedString(file.name))
+                        val name = file.name.substringBeforeLast(".")
+                        clipboardManager.setText(AnnotatedString(name))
 //                                clipboard.setClipEntry(ClipEntry(file.name))
-                        snackBarHostState.showSnackbar("${file.name} copied")
+                        snackBarHostState.showSnackbar(getString(Res.string.name_copied, file.name))
                      }
                   })
                }
