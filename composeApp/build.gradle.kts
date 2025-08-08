@@ -53,6 +53,8 @@ compose.desktop {
         mainClass = "simple.compose.digfinder.MainKt"
 
         nativeDistributions {
+//            jvmArgs += listOf("--add-modules", "java.sql")
+            includeAllModules = true
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
 //            packageName = "simple.compose.digfinder"
             packageName = "DuplicateImageFinder"
