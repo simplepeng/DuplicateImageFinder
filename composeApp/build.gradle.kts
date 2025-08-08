@@ -54,7 +54,8 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "simple.compose.digfinder"
+//            packageName = "simple.compose.digfinder"
+            packageName = "DuplicateImageFinder"
             packageVersion = "1.0.0"
         }
     }
