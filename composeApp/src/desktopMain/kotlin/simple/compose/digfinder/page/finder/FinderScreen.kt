@@ -1,5 +1,6 @@
 package simple.compose.digfinder.page.finder
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
@@ -19,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -37,6 +39,7 @@ import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTarget
 import androidx.compose.ui.draganddrop.DragData
 import androidx.compose.ui.draganddrop.dragData
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import database.Project
@@ -167,13 +170,8 @@ private fun Content(
    val pathList by viewModel.pathList.collectAsState()
    val canShowAnalysis by derivedStateOf { pathList.isNotEmpty() }
 
-   Box(
-      modifier = Modifier.fillMaxSize(),
-      contentAlignment = Alignment.Center,
-   ) {
-      Column(
-         modifier = Modifier.fillMaxSize(),
-      ) {
+   Scaffold(
+      topBar = {
          TopAppBar(
             navigationIcon = {
                Icon(
@@ -191,9 +189,14 @@ private fun Content(
             },
             modifier = Modifier.fillMaxWidth()
          )
+      }
+   ) { paddingValues ->
+      Box(
+         modifier = Modifier.padding(paddingValues),
+         contentAlignment = Alignment.Center
+      ) {
          Column(
-            modifier = Modifier.fillMaxSize()
-               .padding(vertical = 10.dp, horizontal = 10.dp),
+            modifier = Modifier.padding(horizontal = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
          ) {
             OutlinedTextField(

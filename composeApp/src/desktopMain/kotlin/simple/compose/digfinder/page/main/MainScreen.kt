@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -98,39 +99,44 @@ private fun ScreenContent(
 ) {
    val projectList by viewModel.projectList.collectAsState()
 
-   Box(
-      modifier = Modifier.fillMaxSize()
-   ) {
-      LazyColumn(
-         modifier = Modifier.fillMaxSize(),
-         contentPadding = PaddingValues(16.dp),
-         verticalArrangement = Arrangement.spacedBy(10.dp)
-      ) {
-         items(
-            items = projectList,
-            key = { it.id }) { project ->
-            Item(
-               item = project,
-               onItemClick = { item ->
-                  viewModel.performNavigation(MainNavigation.ToFinder(item))
-               },
-               onDeleteClick = { item ->
-                  viewModel.updateDialogState(MainDialogState.DeleteProject(item))
-               }
+   Scaffold(
+      floatingActionButton = {
+         ExtendedFloatingActionButton(
+            modifier = Modifier,
+            onClick = {
+               viewModel.updateDialogState(MainDialogState.AddProject)
+            },
+         ) {
+            Text(
+               text = stringResource(Res.string.add)
             )
          }
       }
-
-      ExtendedFloatingActionButton(
-         modifier = Modifier.align(Alignment.BottomEnd)
-            .padding(bottom = 20.dp, end = 20.dp),
-         onClick = {
-            viewModel.updateDialogState(MainDialogState.AddProject)
-         },
+   ) {
+      Box(
+         modifier = Modifier.fillMaxSize()
       ) {
-         Text(
-            text = stringResource(Res.string.add)
-         )
+         LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+         ) {
+            items(
+               items = projectList,
+               key = { it.id }) { project ->
+               Item(
+                  item = project,
+                  onItemClick = { item ->
+                     viewModel.performNavigation(MainNavigation.ToFinder(item))
+                  },
+                  onDeleteClick = { item ->
+                     viewModel.updateDialogState(MainDialogState.DeleteProject(item))
+                  }
+               )
+            }
+         }
+
+
       }
    }
 }
