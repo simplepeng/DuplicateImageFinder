@@ -37,6 +37,7 @@ kotlin {
             implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
             implementation("app.cash.sqldelight:sqlite-driver:2.1.0")
             implementation("org.jetbrains.compose.material3:material3:1.9.0-alpha04")
+            implementation("org.slf4j:slf4j-simple:2.0.9")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -59,6 +60,16 @@ compose.desktop {
 //            packageName = "simple.compose.digfinder"
             packageName = "DuplicateImageFinder"
             packageVersion = "1.0.0"
+            //设置不开启混淆才能打release包
+            buildTypes {
+                release {
+                    proguard {
+                        version = "7.7.0"
+                        isEnabled = false
+                        configurationFiles.from("proguard-rules.pro")
+                    }
+                }
+            }
         }
     }
 }
