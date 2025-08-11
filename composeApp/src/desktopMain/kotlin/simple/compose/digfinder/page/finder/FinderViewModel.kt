@@ -46,8 +46,8 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
          DatabaseHelper.getProject(id).also {
             _project.value = it
          }
-         updateUIState(FinderUIState.Content)
          getPathList(id)
+         updateUIState(FinderUIState.Default)
       }
    }
 
@@ -99,8 +99,8 @@ class FinderViewModel : BaseViewModel<FinderIntent, FinderNavigation, FinderUISt
 
       hashStrMap.clear()
       duplicateFiles.clear()
-      updateUIState(FinderUIState.Scanning)
 
+      updateUIState(FinderUIState.Loading)
       viewModelScope.launch {
          withContext(Dispatchers.IO) {
             checkedList.forEach { wrapper ->

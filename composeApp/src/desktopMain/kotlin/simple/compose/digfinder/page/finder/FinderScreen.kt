@@ -87,12 +87,12 @@ fun FinderScreen(
       modifier = Modifier.fillMaxSize(),
       contentAlignment = Alignment.Center
    ) {
+      Content(project, viewModel)
+
       when (uiState) {
          FinderUIState.Loading -> LoadingIndicator()
          else -> {}
       }
-
-      Content(project, viewModel)
    }
 
    val dialogState by viewModel.dialogState.collectAsState()

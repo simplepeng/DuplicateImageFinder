@@ -10,9 +10,9 @@ sealed interface FinderUIState : BaseUIState {
 
     data object Loading : FinderUIState
 
-    data object Content : FinderUIState
-
-    data object Scanning : FinderUIState
+//    data object Content : FinderUIState
+//
+//    data object Scanning : FinderUIState
 
     data object Watching : FinderUIState
 
