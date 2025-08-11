@@ -22,7 +22,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material3)
+//            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -37,7 +37,7 @@ kotlin {
             implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
             implementation("app.cash.sqldelight:sqlite-driver:2.1.0")
             implementation("org.jetbrains.compose.material3:material3:1.9.0-alpha04")
-            implementation("org.slf4j:slf4j-simple:2.0.9")
+//            implementation("org.slf4j:slf4j-simple:2.0.9")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
